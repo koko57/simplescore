@@ -12,7 +12,6 @@ import {
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Haptics from 'expo-haptics';
 import { useGame } from '../src/context/GameContext';
 import { Player } from '../src/types';
 
@@ -43,14 +42,13 @@ export default function BoardScreen() {
     }
   }, [contentHeight, containerHeight]);
 
-  const handlePlayerTap = async (player: Player): Promise<void> => {
+  const handlePlayerTap = (player: Player): void => {
     if (state.gameEnded) return;
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedPlayer(player);
     setPointsInput('');
   };
 
-  const handleAddPoints = async (subtract: boolean = false): Promise<void> => {
+  const handleAddPoints = (subtract: boolean = false): void => {
     if (!selectedPlayer) return;
 
     const points = parseInt(pointsInput, 10);
@@ -59,7 +57,6 @@ export default function BoardScreen() {
       return;
     }
 
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     dispatch({
       type: 'ADD_POINTS',
       payload: {
@@ -71,10 +68,9 @@ export default function BoardScreen() {
     setPointsInput('');
   };
 
-  const handleResetPlayer = async (): Promise<void> => {
+  const handleResetPlayer = (): void => {
     if (!selectedPlayer) return;
 
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     dispatch({ type: 'RESET_SCORE', payload: { id: selectedPlayer.id } });
     setSelectedPlayer(null);
   };
@@ -88,10 +84,7 @@ export default function BoardScreen() {
         {
           text: 'Reset',
           style: 'destructive',
-          onPress: async () => {
-            await Haptics.notificationAsync(
-              Haptics.NotificationFeedbackType.Warning
-            );
+          onPress: () => {
             dispatch({ type: 'RESET_ALL' });
             setShowMenu(false);
           },
@@ -100,8 +93,7 @@ export default function BoardScreen() {
     );
   };
 
-  const handleEndGame = async (): Promise<void> => {
-    await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+  const handleEndGame = (): void => {
     dispatch({ type: 'END_GAME' });
     setShowMenu(false);
   };
@@ -116,9 +108,6 @@ export default function BoardScreen() {
           text: 'Quit',
           style: 'destructive',
           onPress: async () => {
-            await Haptics.notificationAsync(
-              Haptics.NotificationFeedbackType.Warning
-            );
             await AsyncStorage.removeItem(STORAGE_KEY);
             dispatch({ type: 'QUIT_GAME' });
             router.replace('/');
@@ -129,14 +118,12 @@ export default function BoardScreen() {
   };
 
   const handleNewGameFromEnd = async (): Promise<void> => {
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     await AsyncStorage.removeItem(STORAGE_KEY);
     dispatch({ type: 'NEW_GAME' });
     router.replace('/add-players');
   };
 
-  const handlePlayAgain = async (): Promise<void> => {
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+  const handlePlayAgain = (): void => {
     dispatch({ type: 'RESET_ALL' });
   };
 

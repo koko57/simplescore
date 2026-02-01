@@ -3,7 +3,6 @@ import { View, Text, Pressable, StyleSheet, Alert } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Haptics from 'expo-haptics';
 import { useGame } from '../src/context/GameContext';
 import { Player } from '../src/types';
 
@@ -28,14 +27,12 @@ export default function HomeScreen() {
     }, [])
   );
 
-  const handleNewGame = async (): Promise<void> => {
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+  const handleNewGame = (): void => {
     dispatch({ type: 'NEW_GAME' });
     router.push('/add-players');
   };
 
   const handleLoadGame = async (): Promise<void> => {
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     try {
       const saved = await AsyncStorage.getItem(STORAGE_KEY);
       if (saved) {

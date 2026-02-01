@@ -15,7 +15,6 @@ import {
   GestureHandlerRootView,
   Swipeable,
 } from 'react-native-gesture-handler';
-import * as Haptics from 'expo-haptics';
 import { useGame } from '../src/context/GameContext';
 import { MAX_PLAYERS } from '../src/constants/colors';
 import { Player } from '../src/types';
@@ -29,7 +28,7 @@ export default function AddPlayersScreen() {
   const inputRef = useRef<TextInput>(null);
   const swipeableRefs = useRef<Map<string, Swipeable>>(new Map());
 
-  const handleAddPlayer = async (): Promise<void> => {
+  const handleAddPlayer = (): void => {
     const trimmedName = playerName.trim();
     if (!trimmedName) return;
 
@@ -38,14 +37,12 @@ export default function AddPlayersScreen() {
       return;
     }
 
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     dispatch({ type: 'ADD_PLAYER', payload: { name: trimmedName } });
     setPlayerName('');
     inputRef.current?.focus();
   };
 
-  const handleRemovePlayer = async (id: string): Promise<void> => {
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+  const handleRemovePlayer = (id: string): void => {
     dispatch({ type: 'REMOVE_PLAYER', payload: { id } });
   };
 
@@ -54,13 +51,12 @@ export default function AddPlayersScreen() {
     setEditName(player.name);
   };
 
-  const handleSaveEdit = async (): Promise<void> => {
+  const handleSaveEdit = (): void => {
     if (!editingId || !editName.trim()) {
       setEditingId(null);
       return;
     }
 
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     dispatch({
       type: 'EDIT_PLAYER',
       payload: { id: editingId, name: editName.trim() },
@@ -70,13 +66,12 @@ export default function AddPlayersScreen() {
     Keyboard.dismiss();
   };
 
-  const handleStartGame = async (): Promise<void> => {
+  const handleStartGame = (): void => {
     if (state.players.length < 2) {
       Alert.alert('Not Enough Players', 'Add at least 2 players to start');
       return;
     }
 
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     dispatch({ type: 'START_GAME' });
     router.replace('/board');
   };

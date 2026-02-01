@@ -54,7 +54,6 @@ File-based routing in `app/` directory:
 - Stores `players` array as JSON string
 
 ### Key Libraries
-- `expo-haptics` - Tactile feedback on interactions
 - `react-native-gesture-handler` - Swipe-to-delete on player cards
 - `expo-router` - File-based navigation
 - `react-native-safe-area-context` - Safe area handling
