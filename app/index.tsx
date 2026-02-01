@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGame } from '../src/context/GameContext';
 import { Player } from '../src/types';
+import { theme } from '../src/constants/theme';
 
 const STORAGE_KEY = '@scoreboard_game';
 
@@ -48,8 +49,16 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
+        {/* Decorative circles */}
+        <View style={styles.decorCircle1} />
+        <View style={styles.decorCircle2} />
+        <View style={styles.decorCircle3} />
+
+        <View style={styles.logoContainer}>
+          <Text style={styles.logoText}>S</Text>
+        </View>
         <Text style={styles.title}>ScoreBoard</Text>
-        <Text style={styles.subtitle}>Track scores for your games</Text>
+        <Text style={styles.subtitle}>Let the games begin!</Text>
 
         <View style={styles.buttonContainer}>
           <Pressable
@@ -79,7 +88,7 @@ export default function HomeScreen() {
                 !hasSavedGame && styles.textDisabled,
               ]}
             >
-              Load Game
+              Continue
             </Text>
           </Pressable>
         </View>
@@ -91,62 +100,111 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.background,
   },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 32,
+    paddingHorizontal: theme.spacing.xl,
+  },
+  // Decorative background circles
+  decorCircle1: {
+    position: 'absolute',
+    top: -50,
+    right: -50,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: theme.colors.accent,
+    opacity: 0.3,
+  },
+  decorCircle2: {
+    position: 'absolute',
+    bottom: 100,
+    left: -80,
+    width: 180,
+    height: 180,
+    borderRadius: 90,
+    backgroundColor: theme.colors.secondary,
+    opacity: 0.4,
+  },
+  decorCircle3: {
+    position: 'absolute',
+    top: 150,
+    left: 50,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: theme.colors.primary,
+    opacity: 0.2,
+  },
+  logoContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: theme.borderRadius.xl,
+    backgroundColor: theme.colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: theme.spacing.lg,
+    ...theme.shadows.card,
+  },
+  logoText: {
+    fontSize: 52,
+    fontWeight: '800',
+    color: theme.colors.textOnPrimary,
   },
   title: {
-    fontSize: 42,
-    fontWeight: '700',
-    color: '#333',
-    marginBottom: 8,
+    fontSize: 44,
+    fontWeight: '800',
+    color: theme.colors.text,
+    marginBottom: theme.spacing.sm,
+    letterSpacing: -1,
   },
   subtitle: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 64,
+    fontSize: 18,
+    color: theme.colors.textLight,
+    marginBottom: theme.spacing.xxl,
+    fontWeight: '500',
   },
   buttonContainer: {
     width: '100%',
-    gap: 16,
+    gap: theme.spacing.md,
   },
   button: {
-    paddingVertical: 18,
-    paddingHorizontal: 32,
-    borderRadius: 12,
+    paddingVertical: 20,
+    paddingHorizontal: theme.spacing.xl,
+    borderRadius: theme.borderRadius.lg,
     alignItems: 'center',
   },
   buttonPressed: {
-    opacity: 0.8,
-    transform: [{ scale: 0.98 }],
+    transform: [{ scale: 0.97 }],
+    opacity: 0.9,
   },
   primaryButton: {
-    backgroundColor: '#333',
+    backgroundColor: theme.colors.primary,
+    ...theme.shadows.button,
   },
   primaryButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
+    color: theme.colors.textOnPrimary,
+    fontSize: 20,
+    fontWeight: '700',
   },
   secondaryButton: {
-    backgroundColor: '#f0f0f0',
-    borderWidth: 1,
-    borderColor: '#ddd',
+    backgroundColor: theme.colors.surface,
+    borderWidth: 2,
+    borderColor: theme.colors.border,
   },
   secondaryButtonText: {
-    color: '#333',
-    fontSize: 18,
-    fontWeight: '600',
+    color: theme.colors.text,
+    fontSize: 20,
+    fontWeight: '700',
   },
   buttonDisabled: {
-    backgroundColor: '#f5f5f5',
-    borderColor: '#eee',
+    backgroundColor: theme.colors.border,
+    borderColor: theme.colors.border,
   },
   textDisabled: {
-    color: '#bbb',
+    color: theme.colors.textMuted,
   },
 });

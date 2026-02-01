@@ -1,0 +1,82 @@
+// Fun gaming theme with pastel/muted colors
+export const theme = {
+  colors: {
+    // Backgrounds - soft lavender base
+    background: '#F5F3FF',
+    surface: '#FFFFFF',
+    cardBg: '#FEFEFE',
+
+    // Primary - playful coral/peach
+    primary: '#FF8A80',
+    primaryMuted: '#FFAB91',
+
+    // Secondary - soft mint
+    secondary: '#B2DFDB',
+    secondaryDark: '#80CBC4',
+
+    // Accent - cheerful yellow
+    accent: '#FFE082',
+    accentDark: '#FFD54F',
+
+    // Text
+    text: '#37474F',
+    textLight: '#78909C',
+    textMuted: '#B0BEC5',
+    textOnPrimary: '#FFFFFF',
+
+    // Fun action colors (pastel versions)
+    success: '#A5D6A7',
+    successDark: '#81C784',
+    danger: '#EF9A9A',
+    dangerDark: '#E57373',
+
+    // Borders
+    border: '#E8EAF6',
+    borderDark: '#C5CAE9',
+
+    // Overlay
+    overlay: 'rgba(55, 71, 79, 0.4)',
+  },
+
+  shadows: {
+    soft: {
+      shadowColor: '#7C4DFF',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.08,
+      shadowRadius: 8,
+      elevation: 3,
+    },
+    card: {
+      shadowColor: '#7C4DFF',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.12,
+      shadowRadius: 12,
+      elevation: 4,
+    },
+    button: {
+      shadowColor: '#FF8A80',
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.25,
+      shadowRadius: 6,
+      elevation: 3,
+    },
+  },
+
+  spacing: {
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 24,
+    xl: 32,
+    xxl: 48,
+  },
+
+  // Extra rounded for playful feel
+  borderRadius: {
+    sm: 12,
+    md: 16,
+    lg: 24,
+    xl: 32,
+    pill: 50,
+  },
+};

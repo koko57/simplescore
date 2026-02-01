@@ -17,6 +17,7 @@ import {
 } from 'react-native-gesture-handler';
 import { useGame } from '../src/context/GameContext';
 import { MAX_PLAYERS } from '../src/constants/colors';
+import { theme } from '../src/constants/theme';
 import { Player } from '../src/types';
 
 export default function AddPlayersScreen() {
@@ -81,7 +82,7 @@ export default function AddPlayersScreen() {
       style={styles.deleteAction}
       onPress={() => handleRemovePlayer(id)}
     >
-      <Text style={styles.deleteText}>Delete</Text>
+      <Text style={styles.deleteText}>Remove</Text>
     </Pressable>
   );
 
@@ -132,8 +133,8 @@ export default function AddPlayersScreen() {
           <TextInput
             ref={inputRef}
             style={styles.input}
-            placeholder="Enter player name"
-            placeholderTextColor="#999"
+            placeholder="Player name..."
+            placeholderTextColor={theme.colors.textMuted}
             value={playerName}
             onChangeText={setPlayerName}
             onSubmitEditing={handleAddPlayer}
@@ -150,20 +151,24 @@ export default function AddPlayersScreen() {
             onPress={handleAddPlayer}
             disabled={!playerName.trim()}
           >
-            <Text style={styles.addButtonText}>Add</Text>
+            <Text style={styles.addButtonText}>+</Text>
           </Pressable>
         </View>
 
         <View style={styles.listContainer}>
-          <Text style={styles.playerCount}>
-            {state.players.length} / {MAX_PLAYERS} players
-          </Text>
+          <View style={styles.countContainer}>
+            <Text style={styles.playerCount}>
+              {state.players.length} / {MAX_PLAYERS}
+            </Text>
+            <Text style={styles.playerLabel}>players</Text>
+          </View>
 
           {state.players.length === 0 ? (
             <View style={styles.emptyState}>
-              <Text style={styles.emptyText}>No players yet</Text>
+              <Text style={styles.emptyEmoji}>👥</Text>
+              <Text style={styles.emptyText}>No players yet!</Text>
               <Text style={styles.emptySubtext}>
-                Add at least 2 players to start
+                Add at least 2 players to start the game
               </Text>
             </View>
           ) : (
@@ -205,143 +210,164 @@ export default function AddPlayersScreen() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.background,
   },
   container: {
     flex: 1,
   },
   inputContainer: {
     flexDirection: 'row',
-    padding: 16,
-    gap: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    padding: theme.spacing.md,
+    gap: theme.spacing.sm,
+    backgroundColor: theme.colors.surface,
   },
   input: {
     flex: 1,
-    height: 48,
-    backgroundColor: '#f5f5f5',
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    fontSize: 16,
-    color: '#333',
+    height: 56,
+    backgroundColor: theme.colors.background,
+    borderRadius: theme.borderRadius.md,
+    paddingHorizontal: theme.spacing.md,
+    fontSize: 18,
+    color: theme.colors.text,
+    fontWeight: '500',
   },
   addButton: {
-    backgroundColor: '#333',
-    paddingHorizontal: 24,
-    borderRadius: 10,
+    width: 56,
+    height: 56,
+    backgroundColor: theme.colors.secondary,
+    borderRadius: theme.borderRadius.md,
     justifyContent: 'center',
     alignItems: 'center',
   },
   addButtonDisabled: {
-    backgroundColor: '#ccc',
+    backgroundColor: theme.colors.border,
   },
   addButtonText: {
-    color: '#fff',
-    fontSize: 16,
+    color: theme.colors.text,
+    fontSize: 28,
     fontWeight: '600',
   },
   buttonPressed: {
-    opacity: 0.8,
+    transform: [{ scale: 0.95 }],
+    opacity: 0.9,
   },
   listContainer: {
     flex: 1,
-    paddingHorizontal: 16,
+    paddingHorizontal: theme.spacing.md,
+  },
+  countContainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: theme.spacing.xs,
+    marginVertical: theme.spacing.md,
   },
   playerCount: {
-    fontSize: 14,
-    color: '#999',
-    marginVertical: 12,
+    fontSize: 24,
+    fontWeight: '700',
+    color: theme.colors.text,
+  },
+  playerLabel: {
+    fontSize: 16,
+    color: theme.colors.textLight,
+    fontWeight: '500',
   },
   listContent: {
-    paddingBottom: 16,
+    paddingBottom: theme.spacing.md,
   },
   playerItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
-    paddingVertical: 14,
-    paddingHorizontal: 12,
-    marginBottom: 8,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#eee',
+    backgroundColor: theme.colors.surface,
+    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.md,
+    marginBottom: theme.spacing.sm,
+    borderRadius: theme.borderRadius.md,
+    ...theme.shadows.soft,
   },
   colorDot: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    marginRight: 12,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: theme.spacing.md,
   },
   playerNameContainer: {
     flex: 1,
   },
   playerName: {
-    fontSize: 17,
-    color: '#333',
-    fontWeight: '500',
+    fontSize: 18,
+    color: theme.colors.text,
+    fontWeight: '600',
   },
   editHint: {
-    fontSize: 12,
-    color: '#bbb',
+    fontSize: 13,
+    color: theme.colors.textMuted,
     marginTop: 2,
   },
   editInput: {
     flex: 1,
-    fontSize: 17,
-    color: '#333',
-    fontWeight: '500',
+    fontSize: 18,
+    color: theme.colors.text,
+    fontWeight: '600',
     padding: 0,
     borderBottomWidth: 2,
-    borderBottomColor: '#333',
+    borderBottomColor: theme.colors.primary,
   },
   deleteAction: {
-    backgroundColor: '#E53935',
+    backgroundColor: theme.colors.danger,
     justifyContent: 'center',
     alignItems: 'center',
-    width: 80,
-    marginBottom: 8,
-    borderRadius: 10,
+    width: 90,
+    marginBottom: theme.spacing.sm,
+    borderRadius: theme.borderRadius.md,
   },
   deleteText: {
-    color: '#fff',
+    color: theme.colors.textOnPrimary,
     fontWeight: '600',
-    fontSize: 14,
+    fontSize: 15,
   },
   emptyState: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: theme.spacing.xl,
+  },
+  emptyEmoji: {
+    fontSize: 64,
+    marginBottom: theme.spacing.md,
   },
   emptyText: {
-    fontSize: 18,
-    color: '#999',
-    marginBottom: 4,
+    fontSize: 22,
+    fontWeight: '700',
+    color: theme.colors.text,
+    marginBottom: theme.spacing.xs,
   },
   emptySubtext: {
-    fontSize: 14,
-    color: '#bbb',
+    fontSize: 16,
+    color: theme.colors.textLight,
+    textAlign: 'center',
   },
   footer: {
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
+    padding: theme.spacing.md,
+    backgroundColor: theme.colors.surface,
   },
   startButton: {
-    backgroundColor: '#43A047',
-    paddingVertical: 16,
-    borderRadius: 12,
+    backgroundColor: theme.colors.success,
+    paddingVertical: 18,
+    borderRadius: theme.borderRadius.lg,
     alignItems: 'center',
+    ...theme.shadows.soft,
   },
   startButtonDisabled: {
-    backgroundColor: '#ccc',
+    backgroundColor: theme.colors.border,
+    shadowOpacity: 0,
+    elevation: 0,
   },
   startButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
+    color: theme.colors.text,
+    fontSize: 20,
+    fontWeight: '700',
   },
   startButtonTextDisabled: {
-    color: '#fff',
+    color: theme.colors.textMuted,
   },
 });

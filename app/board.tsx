@@ -14,6 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGame } from '../src/context/GameContext';
 import { Player } from '../src/types';
+import { theme } from '../src/constants/theme';
 
 const STORAGE_KEY = '@scoreboard_game';
 
@@ -134,18 +135,21 @@ export default function BoardScreen() {
       <Pressable
         style={({ pressed }) => [
           styles.playerCard,
-          { borderLeftColor: item.color },
+          { backgroundColor: item.color + '20', borderColor: item.color },
           pressed && !state.gameEnded && styles.playerCardPressed,
           isWinner && styles.winnerCard,
         ]}
         onPress={() => handlePlayerTap(item)}
         disabled={state.gameEnded}
       >
-        <Text style={[styles.playerName, isWinner && styles.winnerName]}>
-          {item.name}
-          {isWinner && ' 🏆'}
-        </Text>
-        <Text style={[styles.playerScore, isWinner && styles.winnerScore]}>
+        <View style={styles.playerInfo}>
+          <View style={[styles.colorDot, { backgroundColor: item.color }]} />
+          <Text style={styles.playerName}>
+            {item.name}
+            {isWinner && ' 🏆'}
+          </Text>
+        </View>
+        <Text style={[styles.playerScore, { color: item.color }]}>
           {item.points}
         </Text>
       </Pressable>
@@ -153,18 +157,18 @@ export default function BoardScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['bottom']}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>
-          {state.gameEnded ? 'Game Over!' : 'Scoreboard'}
+          {state.gameEnded ? '🎉 Game Over!' : '🎮 Scoreboard'}
         </Text>
         {!state.gameEnded && (
           <Pressable
             style={styles.menuButton}
             onPress={() => setShowMenu(true)}
           >
-            <Text style={styles.menuButtonText}>•••</Text>
+            <Text style={styles.menuButtonText}>⚙️</Text>
           </Pressable>
         )}
       </View>
@@ -223,15 +227,21 @@ export default function BoardScreen() {
           onPress={() => setSelectedPlayer(null)}
         >
           <Pressable style={styles.modalContent} onPress={() => {}}>
+            <View
+              style={[
+                styles.modalPlayerDot,
+                { backgroundColor: selectedPlayer?.color },
+              ]}
+            />
             <Text style={styles.modalTitle}>{selectedPlayer?.name}</Text>
             <Text style={styles.modalSubtitle}>
-              Current: {selectedPlayer?.points} points
+              Current score: {selectedPlayer?.points}
             </Text>
 
             <TextInput
               style={styles.pointsInput}
-              placeholder="Enter points"
-              placeholderTextColor="#999"
+              placeholder="0"
+              placeholderTextColor={theme.colors.textMuted}
               keyboardType="number-pad"
               value={pointsInput}
               onChangeText={setPointsInput}
@@ -261,10 +271,7 @@ export default function BoardScreen() {
               </Pressable>
             </View>
 
-            <Pressable
-              style={styles.resetButton}
-              onPress={handleResetPlayer}
-            >
+            <Pressable style={styles.resetButton} onPress={handleResetPlayer}>
               <Text style={styles.resetText}>Reset to 0</Text>
             </Pressable>
           </Pressable>
@@ -290,18 +297,18 @@ export default function BoardScreen() {
               onPress={() => {
                 saveGame();
                 setShowMenu(false);
-                Alert.alert('Saved', 'Game saved successfully');
+                Alert.alert('Saved!', 'Game saved successfully');
               }}
             >
-              <Text style={styles.menuItemText}>Save Game</Text>
+              <Text style={styles.menuItemText}>💾 Save Game</Text>
             </Pressable>
 
             <Pressable style={styles.menuItem} onPress={handleResetAll}>
-              <Text style={styles.menuItemText}>Reset All Scores</Text>
+              <Text style={styles.menuItemText}>🔄 Reset All Scores</Text>
             </Pressable>
 
             <Pressable style={styles.menuItem} onPress={handleEndGame}>
-              <Text style={styles.menuItemText}>End Game</Text>
+              <Text style={styles.menuItemText}>🏁 End Game</Text>
             </Pressable>
 
             <Pressable
@@ -309,7 +316,7 @@ export default function BoardScreen() {
               onPress={handleQuit}
             >
               <Text style={[styles.menuItemText, styles.quitText]}>
-                Quit Game
+                🚪 Quit Game
               </Text>
             </Pressable>
 
@@ -329,228 +336,238 @@ export default function BoardScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: theme.colors.background,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.md,
+    backgroundColor: theme.colors.surface,
+    ...theme.shadows.soft,
   },
   headerTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#333',
+    fontSize: 26,
+    fontWeight: '800',
+    color: theme.colors.text,
   },
   menuButton: {
-    padding: 8,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: theme.colors.background,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   menuButtonText: {
-    fontSize: 20,
-    color: '#333',
-    fontWeight: '600',
+    fontSize: 22,
   },
   listWrapper: {
     flex: 1,
   },
   listContent: {
-    padding: 16,
+    padding: theme.spacing.md,
   },
   playerCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 16,
-    marginBottom: 10,
-    borderRadius: 12,
-    borderLeftWidth: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    padding: theme.spacing.lg,
+    marginBottom: theme.spacing.sm,
+    borderRadius: theme.borderRadius.lg,
+    borderWidth: 2,
   },
   playerCardPressed: {
-    opacity: 0.8,
     transform: [{ scale: 0.98 }],
+    opacity: 0.9,
   },
   winnerCard: {
-    backgroundColor: '#FFF9C4',
-    borderLeftWidth: 5,
-    borderLeftColor: '#FFD600',
+    backgroundColor: theme.colors.accent + '40',
+    borderColor: theme.colors.accentDark,
+    borderWidth: 3,
+  },
+  playerInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  colorDot: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    marginRight: theme.spacing.sm,
   },
   playerName: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
-  },
-  winnerName: {
-    color: '#333',
+    fontSize: 20,
+    fontWeight: '700',
+    color: theme.colors.text,
   },
   playerScore: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#333',
-  },
-  winnerScore: {
-    color: '#333',
+    fontSize: 36,
+    fontWeight: '800',
   },
   endedActions: {
     flexDirection: 'row',
-    padding: 16,
-    gap: 12,
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
+    padding: theme.spacing.md,
+    gap: theme.spacing.sm,
+    backgroundColor: theme.colors.surface,
   },
   endedButton: {
     flex: 1,
-    paddingVertical: 14,
-    borderRadius: 10,
+    paddingVertical: 16,
+    borderRadius: theme.borderRadius.md,
     alignItems: 'center',
   },
   playAgainButton: {
-    backgroundColor: '#43A047',
+    backgroundColor: theme.colors.success,
   },
   playAgainText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+    color: theme.colors.text,
+    fontSize: 18,
+    fontWeight: '700',
   },
   newGameButton: {
-    backgroundColor: '#f0f0f0',
-    borderWidth: 1,
-    borderColor: '#ddd',
+    backgroundColor: theme.colors.surface,
+    borderWidth: 2,
+    borderColor: theme.colors.border,
   },
   newGameText: {
-    color: '#333',
-    fontSize: 16,
-    fontWeight: '600',
+    color: theme.colors.text,
+    fontSize: 18,
+    fontWeight: '700',
   },
   buttonPressed: {
-    opacity: 0.8,
+    transform: [{ scale: 0.97 }],
+    opacity: 0.9,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: theme.colors.overlay,
     justifyContent: 'center',
     alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 24,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.xl,
+    padding: theme.spacing.lg,
     width: '85%',
     maxWidth: 340,
+    alignItems: 'center',
+    ...theme.shadows.card,
+  },
+  modalPlayerDot: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    marginBottom: theme.spacing.sm,
   },
   modalTitle: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: '#333',
+    fontSize: 24,
+    fontWeight: '800',
+    color: theme.colors.text,
     textAlign: 'center',
-    marginBottom: 4,
+    marginBottom: theme.spacing.xs,
   },
   modalSubtitle: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: 16,
+    color: theme.colors.textLight,
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: theme.spacing.lg,
   },
   pointsInput: {
-    backgroundColor: '#f5f5f5',
-    borderRadius: 10,
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-    fontSize: 24,
-    fontWeight: '600',
+    width: '100%',
+    backgroundColor: theme.colors.background,
+    borderRadius: theme.borderRadius.md,
+    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.md,
+    fontSize: 32,
+    fontWeight: '700',
     textAlign: 'center',
-    color: '#333',
-    marginBottom: 16,
+    color: theme.colors.text,
+    marginBottom: theme.spacing.md,
   },
   modalButtons: {
     flexDirection: 'row',
-    gap: 12,
-    marginBottom: 12,
+    gap: theme.spacing.sm,
+    marginBottom: theme.spacing.md,
+    width: '100%',
   },
   modalButton: {
     flex: 1,
-    paddingVertical: 14,
-    borderRadius: 10,
+    paddingVertical: 16,
+    borderRadius: theme.borderRadius.md,
     alignItems: 'center',
   },
   subtractButton: {
-    backgroundColor: '#FFEBEE',
+    backgroundColor: theme.colors.danger,
   },
   subtractText: {
-    color: '#E53935',
-    fontSize: 16,
-    fontWeight: '600',
+    color: theme.colors.text,
+    fontSize: 17,
+    fontWeight: '700',
   },
   addPointsButton: {
-    backgroundColor: '#E8F5E9',
+    backgroundColor: theme.colors.success,
   },
   addPointsText: {
-    color: '#43A047',
-    fontSize: 16,
-    fontWeight: '600',
+    color: theme.colors.text,
+    fontSize: 17,
+    fontWeight: '700',
   },
   resetButton: {
-    paddingVertical: 12,
+    paddingVertical: theme.spacing.sm,
     alignItems: 'center',
   },
   resetText: {
-    color: '#999',
-    fontSize: 14,
+    color: theme.colors.textLight,
+    fontSize: 15,
     fontWeight: '500',
   },
   menuContent: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.xl,
     width: '85%',
     maxWidth: 340,
     overflow: 'hidden',
+    ...theme.shadows.card,
   },
   menuTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#333',
+    fontSize: 20,
+    fontWeight: '800',
+    color: theme.colors.text,
     textAlign: 'center',
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    padding: theme.spacing.lg,
   },
   menuItem: {
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.lg,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
   },
   menuItemText: {
-    fontSize: 16,
-    color: '#333',
+    fontSize: 17,
+    color: theme.colors.text,
     textAlign: 'center',
-  },
-  quitItem: {
-    backgroundColor: '#FFEBEE',
-  },
-  quitText: {
-    color: '#E53935',
     fontWeight: '600',
   },
+  quitItem: {
+    backgroundColor: theme.colors.danger + '20',
+  },
+  quitText: {
+    color: theme.colors.dangerDark,
+  },
   cancelItem: {
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    backgroundColor: '#f5f5f5',
+    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.lg,
+    backgroundColor: theme.colors.background,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
   },
   cancelText: {
-    fontSize: 16,
-    color: '#666',
+    fontSize: 17,
+    color: theme.colors.textLight,
     textAlign: 'center',
-    fontWeight: '500',
+    fontWeight: '600',
   },
 });

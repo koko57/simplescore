@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GameProvider } from '../src/context/GameContext';
+import { theme } from '../src/constants/theme';
 
 export default function RootLayout() {
   return (
@@ -9,14 +10,16 @@ export default function RootLayout() {
       <Stack
         screenOptions={{
           headerStyle: {
-            backgroundColor: '#f5f5f5',
+            backgroundColor: theme.colors.surface,
           },
-          headerTintColor: '#333',
+          headerTintColor: theme.colors.primary,
           headerTitleStyle: {
-            fontWeight: '600',
+            fontWeight: '700',
+            color: theme.colors.text,
           },
+          headerShadowVisible: false,
           contentStyle: {
-            backgroundColor: '#fff',
+            backgroundColor: theme.colors.background,
           },
         }}
       >
@@ -40,6 +43,7 @@ export default function RootLayout() {
             title: 'Game Board',
             headerBackVisible: false,
             gestureEnabled: false,
+            headerShown: false,
           }}
         />
       </Stack>
