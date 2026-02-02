@@ -1,20 +1,20 @@
 // Fun gaming theme with pastel/muted colors
 export const theme = {
   colors: {
-    // Backgrounds - soft lavender base
+    // Backgrounds
     background: '#F5F3FF',
     surface: '#FFFFFF',
     cardBg: '#FEFEFE',
 
-    // Primary - playful coral/peach
+    // Primary
     primary: '#FF8A80',
     primaryMuted: '#FFAB91',
 
-    // Secondary - soft mint
+    // Secondary
     secondary: '#B2DFDB',
     secondaryDark: '#80CBC4',
 
-    // Accent - cheerful yellow
+    // Accent
     accent: '#FFE082',
     accentDark: '#FFD54F',
 
@@ -24,7 +24,7 @@ export const theme = {
     textMuted: '#B0BEC5',
     textOnPrimary: '#FFFFFF',
 
-    // Fun action colors (pastel versions)
+    // Fun action colors
     success: '#A5D6A7',
     successDark: '#81C784',
     danger: '#EF9A9A',
@@ -71,7 +71,6 @@ export const theme = {
     xxl: 48,
   },
 
-  // Extra rounded for playful feel
   borderRadius: {
     sm: 12,
     md: 16,
