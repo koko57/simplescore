@@ -1,14 +1,14 @@
 // Fun gaming theme with pastel/muted colors
 export const theme = {
   colors: {
-    // Backgrounds
-    background: '#F5F3FF',
+    // Backgrounds - soft purple tint
+    background: '#EDE7F6',
     surface: '#FFFFFF',
     cardBg: '#FEFEFE',
 
-    // Primary
-    primary: '#FF8A80',
-    primaryMuted: '#FFAB91',
+    // Primary - purple tones
+    primary: '#9575CD',
+    primaryMuted: '#B39DDB',
 
     // Secondary
     secondary: '#B2DFDB',
@@ -54,7 +54,7 @@ export const theme = {
       elevation: 4,
     },
     button: {
-      shadowColor: '#FF8A80',
+      shadowColor: '#9575CD',
       shadowOffset: { width: 0, height: 3 },
       shadowOpacity: 0.25,
       shadowRadius: 6,
