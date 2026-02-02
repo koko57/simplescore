@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { GameProvider } from '../src/context/GameContext';
 import { theme } from '../src/constants/theme';
 
-export default function RootLayout() {
+const RootLayout = () => {
   return (
     <GameProvider>
       <StatusBar style="dark" />
@@ -49,4 +49,6 @@ export default function RootLayout() {
       </Stack>
     </GameProvider>
   );
-}
+};
+
+export default RootLayout;

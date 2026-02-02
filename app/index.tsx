@@ -9,7 +9,7 @@ import { theme } from '../src/constants/theme';
 
 const STORAGE_KEY = '@scoreboard_game';
 
-export default function HomeScreen() {
+const HomeScreen = () => {
   const router = useRouter();
   const { dispatch } = useGame();
   const [hasSavedGame, setHasSavedGame] = useState(false);
@@ -208,3 +208,5 @@ const styles = StyleSheet.create({
     color: theme.colors.textMuted,
   },
 });
+
+export default HomeScreen;

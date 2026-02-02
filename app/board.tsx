@@ -18,7 +18,7 @@ import { theme } from '../src/constants/theme';
 
 const STORAGE_KEY = '@scoreboard_game';
 
-export default function BoardScreen() {
+const BoardScreen = () => {
   const router = useRouter();
   const { state, dispatch } = useGame();
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
@@ -571,3 +571,5 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+export default BoardScreen;

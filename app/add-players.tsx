@@ -20,7 +20,7 @@ import { MAX_PLAYERS } from '../src/constants/colors';
 import { theme } from '../src/constants/theme';
 import { Player } from '../src/types';
 
-export default function AddPlayersScreen() {
+const AddPlayersScreen = () => {
   const router = useRouter();
   const { state, dispatch } = useGame();
   const [playerName, setPlayerName] = useState('');
@@ -366,3 +366,5 @@ emptyText: {
     color: theme.colors.textMuted,
   },
 });
+
+export default AddPlayersScreen;

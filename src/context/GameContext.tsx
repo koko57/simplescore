@@ -9,11 +9,10 @@ const initialState: GameState = {
   isAddingPlayer: false,
 };
 
-function generateId(): string {
-  return Date.now().toString(36) + Math.random().toString(36).substring(2);
-}
+const generateId = (): string =>
+  Date.now().toString(36) + Math.random().toString(36).substring(2);
 
-function gameReducer(state: GameState, action: GameAction): GameState {
+const gameReducer = (state: GameState, action: GameAction): GameState => {
   switch (action.type) {
     case 'ADD_PLAYER': {
       const newPlayer: Player = {
@@ -150,7 +149,7 @@ interface GameProviderProps {
   children: ReactNode;
 }
 
-export function GameProvider({ children }: GameProviderProps) {
+export const GameProvider = ({ children }: GameProviderProps) => {
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
   return (
@@ -160,7 +159,7 @@ export function GameProvider({ children }: GameProviderProps) {
   );
 }
 
-export function useGame(): GameContextType {
+export const useGame = (): GameContextType => {
   const context = useContext(GameContext);
   if (context === undefined) {
     throw new Error('useGame must be used within a GameProvider');
