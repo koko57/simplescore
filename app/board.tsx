@@ -146,7 +146,7 @@ export default function BoardScreen() {
           <View style={[styles.colorDot, { backgroundColor: item.color }]} />
           <Text style={styles.playerName}>
             {item.name}
-            {isWinner && ' 🏆'}
+{isWinner && ' (Winner)'}
           </Text>
         </View>
         <Text style={[styles.playerScore, { color: item.color }]}>
@@ -161,14 +161,14 @@ export default function BoardScreen() {
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>
-          {state.gameEnded ? '🎉 Game Over!' : '🎮 Scoreboard'}
+          {state.gameEnded ? 'Game Over!' : 'Scoreboard'}
         </Text>
         {!state.gameEnded && (
           <Pressable
             style={styles.menuButton}
             onPress={() => setShowMenu(true)}
           >
-            <Text style={styles.menuButtonText}>⚙️</Text>
+            <Text style={styles.menuButtonText}>•••</Text>
           </Pressable>
         )}
       </View>
@@ -300,15 +300,15 @@ export default function BoardScreen() {
                 Alert.alert('Saved!', 'Game saved successfully');
               }}
             >
-              <Text style={styles.menuItemText}>💾 Save Game</Text>
+              <Text style={styles.menuItemText}>Save Game</Text>
             </Pressable>
 
             <Pressable style={styles.menuItem} onPress={handleResetAll}>
-              <Text style={styles.menuItemText}>🔄 Reset All Scores</Text>
+              <Text style={styles.menuItemText}>Reset All Scores</Text>
             </Pressable>
 
             <Pressable style={styles.menuItem} onPress={handleEndGame}>
-              <Text style={styles.menuItemText}>🏁 End Game</Text>
+              <Text style={styles.menuItemText}>End Game</Text>
             </Pressable>
 
             <Pressable
@@ -316,7 +316,7 @@ export default function BoardScreen() {
               onPress={handleQuit}
             >
               <Text style={[styles.menuItemText, styles.quitText]}>
-                🚪 Quit Game
+                Quit Game
               </Text>
             </Pressable>
 

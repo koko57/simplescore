@@ -165,7 +165,6 @@ export default function AddPlayersScreen() {
 
           {state.players.length === 0 ? (
             <View style={styles.emptyState}>
-              <Text style={styles.emptyEmoji}>👥</Text>
               <Text style={styles.emptyText}>No players yet!</Text>
               <Text style={styles.emptySubtext}>
                 Add at least 2 players to start the game
@@ -331,11 +330,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: theme.spacing.xl,
   },
-  emptyEmoji: {
-    fontSize: 64,
-    marginBottom: theme.spacing.md,
-  },
-  emptyText: {
+emptyText: {
     fontSize: 22,
     fontWeight: '700',
     color: theme.colors.text,
