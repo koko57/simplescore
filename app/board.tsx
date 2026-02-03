@@ -72,13 +72,6 @@ const BoardScreen = () => {
         setPointsInput('');
     };
 
-    const handleResetPlayer = (): void => {
-        if (!selectedPlayer) return;
-
-        dispatch({ type: 'RESET_SCORE', payload: { id: selectedPlayer.id } });
-        setSelectedPlayer(null);
-    };
-
     const handleResetAll = (): void => {
         Alert.alert(
             'Reset All Scores',
@@ -98,7 +91,6 @@ const BoardScreen = () => {
     };
 
     const handleEndGame = (): void => {
-        dispatch({ type: 'END_GAME' });
         setShowMenu(false);
     };
 
@@ -113,7 +105,7 @@ const BoardScreen = () => {
                     style: 'destructive',
                     onPress: async () => {
                         await AsyncStorage.removeItem(STORAGE_KEY);
-                        dispatch({ type: 'QUIT_GAME' });
+                        dispatch({ type: 'NEW_GAME' });
                         router.replace('/');
                     },
                 },
@@ -202,7 +194,6 @@ const BoardScreen = () => {
                 />
             </View>
 
-            {/* Game Ended Actions */}
             {state.gameEnded && (
                 <View style={styles.endedActions}>
                     <Pressable
@@ -272,7 +263,7 @@ const BoardScreen = () => {
                                 onPress={() => handleAddPoints(true)}
                             >
                                 <Text style={styles.subtractText}>
-                                    − Subtract
+                                    −
                                 </Text>
                             </Pressable>
                             <Pressable
@@ -286,13 +277,6 @@ const BoardScreen = () => {
                                 <Text style={styles.addPointsText}>+ Add</Text>
                             </Pressable>
                         </View>
-
-                        <Pressable
-                            style={styles.resetButton}
-                            onPress={handleResetPlayer}
-                        >
-                            <Text style={styles.resetText}>Reset to 0</Text>
-                        </Pressable>
                     </Pressable>
                 </Pressable>
             </Modal>

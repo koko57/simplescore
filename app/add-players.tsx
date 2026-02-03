@@ -75,7 +75,6 @@ const AddPlayersScreen = () => {
             return;
         }
 
-        dispatch({ type: 'START_GAME' });
         router.replace('/board');
     };
 
