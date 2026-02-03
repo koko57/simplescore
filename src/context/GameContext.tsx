@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { GameState, GameAction, Player } from '../types';
-import { PLAYER_COLORS } from '../constants/colors';
+import { GameState, GameAction, Player } from '@/types';
+import { PLAYER_COLORS } from '@/constants/colors';
 
 const initialState: GameState = {
     players: [],

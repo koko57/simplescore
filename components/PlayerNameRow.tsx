@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import { theme } from '../src/constants/theme';
-import { Player } from '../src/types';
+import { theme } from '@/constants/theme';
+import { Player } from '@/types';
 
 type PlayerNameRowProps = {
     item: Player;
@@ -12,7 +12,7 @@ type PlayerNameRowProps = {
     onRemove: (id: string) => void;
 }
 
-const PlayerNameRow = ({
+export const PlayerNameRow = ({
     item,
     isEditing,
     editName,
@@ -119,5 +119,3 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
 });
-
-export default PlayerNameRow;

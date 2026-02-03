@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { GameProvider } from '../src/context/GameContext';
-import { theme } from '../src/constants/theme';
+import { GameProvider } from '@/context/GameContext';
+import { theme } from '@/constants/theme';
 
 const RootLayout = () => {
     return (

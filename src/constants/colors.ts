@@ -1,4 +1,3 @@
-// 12 fun pastel player colors - soft but distinguishable
 export const PLAYER_COLORS: string[] = [
     '#FF8A80', // Coral
     '#82B1FF', // Sky Blue

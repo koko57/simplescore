@@ -12,9 +12,9 @@ import {
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useGame } from '../src/context/GameContext';
-import { Player } from '../src/types';
-import { theme } from '../src/constants/theme';
+import { useGame } from '@/context/GameContext';
+import { Player } from '@/types';
+import { theme } from '@/constants/theme';
 
 const STORAGE_KEY = '@scoreboard_game';
 

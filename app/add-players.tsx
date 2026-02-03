@@ -11,11 +11,11 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useGame } from '../src/context/GameContext';
-import { MAX_PLAYERS } from '../src/constants/colors';
-import { theme } from '../src/constants/theme';
-import { Player } from '../src/types';
-import PlayerNameRow from '../components/PlayerNameRow';
+import { useGame } from '@/context/GameContext';
+import { MAX_PLAYERS } from '@/constants/colors';
+import { theme } from '@/constants/theme';
+import { Player } from '@/types';
+import { PlayerNameRow } from '@components/PlayerNameRow';
 
 const AddPlayersScreen = () => {
     const router = useRouter();
