@@ -19,6 +19,7 @@ import { useGame } from '../src/context/GameContext';
 import { MAX_PLAYERS } from '../src/constants/colors';
 import { theme } from '../src/constants/theme';
 import { Player } from '../src/types';
+import PlayerNameRow from '../components/PlayerNameRow';
 
 const AddPlayersScreen = () => {
     const router = useRouter();
@@ -83,57 +84,19 @@ const AddPlayersScreen = () => {
         router.replace('/board');
     };
 
-    const renderRightActions = (id: string) => (
-        <Pressable
-            style={styles.deleteAction}
-            onPress={() => handleRemovePlayer(id)}
-        >
-            <Text style={styles.deleteText}>Remove</Text>
-        </Pressable>
-    );
-
     const renderPlayer = ({ item }: { item: Player }) => {
         const isEditing = editingId === item.id;
 
         return (
-            <Swipeable
-                ref={(ref) => {
-                    if (ref) {
-                        swipeableRefs.current.set(item.id, ref);
-                    }
-                }}
-                renderRightActions={() => renderRightActions(item.id)}
-                onSwipeableOpen={() => handleRemovePlayer(item.id)}
-                friction={2}
-            >
-                <View style={styles.playerItem}>
-                    <View
-                        style={[
-                            styles.colorDot,
-                            { backgroundColor: item.color },
-                        ]}
-                    />
-                    {isEditing ? (
-                        <TextInput
-                            style={styles.editInput}
-                            value={editName}
-                            onChangeText={setEditName}
-                            onBlur={handleSaveEdit}
-                            onSubmitEditing={handleSaveEdit}
-                            autoFocus
-                            selectTextOnFocus
-                        />
-                    ) : (
-                        <Pressable
-                            style={styles.playerNameContainer}
-                            onPress={() => handleStartEdit(item)}
-                        >
-                            <Text style={styles.playerName}>{item.name}</Text>
-                            <Text style={styles.editHint}>Tap to edit</Text>
-                        </Pressable>
-                    )}
-                </View>
-            </Swipeable>
+            <PlayerNameRow
+                item={item}
+                isEditing={isEditing}
+                editName={editName}
+                setEditName={setEditName}
+                handleSaveEdit={handleSaveEdit}
+                handleStartEdit={handleStartEdit}
+                onRemove={handleRemovePlayer}
+            />
         );
     };
 
