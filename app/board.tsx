@@ -158,7 +158,6 @@ const BoardScreen = () => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>
           {state.gameEnded ? 'Game Over!' : 'Scoreboard'}
@@ -173,7 +172,6 @@ const BoardScreen = () => {
         )}
       </View>
 
-      {/* Player List */}
       <View
         style={styles.listWrapper}
         onLayout={(e) => setContainerHeight(e.nativeEvent.layout.height)}
@@ -215,7 +213,6 @@ const BoardScreen = () => {
         </View>
       )}
 
-      {/* Points Modal */}
       <Modal
         visible={selectedPlayer !== null}
         transparent
@@ -278,7 +275,6 @@ const BoardScreen = () => {
         </Pressable>
       </Modal>
 
-      {/* Menu Modal */}
       <Modal
         visible={showMenu}
         transparent
@@ -336,7 +332,7 @@ const BoardScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.surface,
   },
   header: {
     flexDirection: 'row',
@@ -345,7 +341,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.md,
     backgroundColor: theme.colors.surface,
-    ...theme.shadows.soft,
   },
   headerTitle: {
     fontSize: 26,
@@ -420,10 +415,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   playAgainButton: {
-    backgroundColor: theme.colors.success,
+    backgroundColor: theme.colors.successDark,
   },
   playAgainText: {
-    color: theme.colors.text,
+    color: theme.colors.textOnPrimary,
     fontSize: 18,
     fontWeight: '700',
   },
@@ -443,7 +438,6 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: theme.colors.overlay,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -477,7 +471,7 @@ const styles = StyleSheet.create({
   },
   pointsInput: {
     width: '100%',
-    backgroundColor: theme.colors.background,
+    backgroundColor: '#F5F0FC',
     borderRadius: theme.borderRadius.md,
     paddingVertical: theme.spacing.md,
     paddingHorizontal: theme.spacing.md,
@@ -500,18 +494,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   subtractButton: {
-    backgroundColor: theme.colors.danger,
+    backgroundColor: theme.colors.dangerDark,
   },
   subtractText: {
-    color: theme.colors.text,
+    color: theme.colors.textOnPrimary,
     fontSize: 17,
     fontWeight: '700',
   },
   addPointsButton: {
-    backgroundColor: theme.colors.success,
+    backgroundColor: theme.colors.successDark,
   },
   addPointsText: {
-    color: theme.colors.text,
+    color: theme.colors.textOnPrimary,
     fontSize: 17,
     fontWeight: '700',
   },
@@ -525,7 +519,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   menuContent: {
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.backgroundLight,
     borderRadius: theme.borderRadius.xl,
     width: '85%',
     maxWidth: 340,

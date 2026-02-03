@@ -9,18 +9,12 @@ const RootLayout = () => {
       <StatusBar style="dark" />
       <Stack
         screenOptions={{
-          headerStyle: {
-            backgroundColor: theme.colors.surface,
-          },
           headerTintColor: theme.colors.primary,
           headerTitleStyle: {
             fontWeight: '700',
             color: theme.colors.text,
           },
           headerShadowVisible: false,
-          contentStyle: {
-            backgroundColor: theme.colors.background,
-          },
         }}
       >
         <Stack.Screen
@@ -28,6 +22,9 @@ const RootLayout = () => {
           options={{
             title: 'ScoreBoard',
             headerShown: false,
+              contentStyle: {
+                backgroundColor: theme.colors.background,
+              }
           }}
         />
         <Stack.Screen

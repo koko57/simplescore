@@ -1,14 +1,13 @@
 // Fun gaming theme with pastel/muted colors
 export const theme = {
   colors: {
-    // Backgrounds - soft purple tint
+    // Backgrounds
     background: '#EDE7F6',
+    backgroundLight: '#f9f7fd',
     surface: '#FFFFFF',
-    cardBg: '#FEFEFE',
 
-    // Primary - purple tones
+    // Primary
     primary: '#9575CD',
-    primaryMuted: '#B39DDB',
 
     // Secondary
     secondary: '#B2DFDB',
@@ -24,18 +23,13 @@ export const theme = {
     textMuted: '#B0BEC5',
     textOnPrimary: '#FFFFFF',
 
-    // Fun action colors
-    success: '#A5D6A7',
+    // Action colors
     successDark: '#81C784',
     danger: '#EF9A9A',
     dangerDark: '#E57373',
 
     // Borders
     border: '#E8EAF6',
-    borderDark: '#C5CAE9',
-
-    // Overlay
-    overlay: 'rgba(55, 71, 79, 0.4)',
   },
 
   shadows: {
@@ -72,10 +66,8 @@ export const theme = {
   },
 
   borderRadius: {
-    sm: 12,
     md: 16,
     lg: 24,
     xl: 32,
-    pill: 50,
   },
 };

@@ -209,7 +209,7 @@ const AddPlayersScreen = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.surface,
   },
   container: {
     flex: 1,
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 56,
-    backgroundColor: theme.colors.background,
+    backgroundColor: '#F5F0FC',
     borderRadius: theme.borderRadius.md,
     paddingHorizontal: theme.spacing.md,
     fontSize: 18,
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   addButton: {
     width: 56,
     height: 56,
-    backgroundColor: theme.colors.secondary,
+    backgroundColor: theme.colors.secondaryDark,
     borderRadius: theme.borderRadius.md,
     justifyContent: 'center',
     alignItems: 'center',
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.border,
   },
   addButtonText: {
-    color: theme.colors.text,
+    color: theme.colors.textOnPrimary,
     fontSize: 28,
     fontWeight: '600',
   },
@@ -346,7 +346,7 @@ emptyText: {
     backgroundColor: theme.colors.surface,
   },
   startButton: {
-    backgroundColor: theme.colors.success,
+    backgroundColor: theme.colors.successDark,
     paddingVertical: 18,
     borderRadius: theme.borderRadius.lg,
     alignItems: 'center',
@@ -358,7 +358,7 @@ emptyText: {
     elevation: 0,
   },
   startButtonText: {
-    color: theme.colors.text,
+    color: theme.colors.textOnPrimary,
     fontSize: 20,
     fontWeight: '700',
   },
