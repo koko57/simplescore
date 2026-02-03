@@ -11,10 +11,6 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-    GestureHandlerRootView,
-    Swipeable,
-} from 'react-native-gesture-handler';
 import { useGame } from '../src/context/GameContext';
 import { MAX_PLAYERS } from '../src/constants/colors';
 import { theme } from '../src/constants/theme';
@@ -28,7 +24,6 @@ const AddPlayersScreen = () => {
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editName, setEditName] = useState('');
     const inputRef = useRef<TextInput>(null);
-    const swipeableRefs = useRef<Map<string, Swipeable>>(new Map());
 
     const handleAddPlayer = (): void => {
         const trimmedName = playerName.trim();
@@ -37,7 +32,7 @@ const AddPlayersScreen = () => {
         if (state.players.length >= MAX_PLAYERS) {
             Alert.alert(
                 'Limit Reached',
-                `Maximum ${MAX_PLAYERS} players allowed`
+                `Maximum ${MAX_PLAYERS} players allowed`,
             );
             return;
         }
@@ -75,7 +70,7 @@ const AddPlayersScreen = () => {
         if (state.players.length < 2) {
             Alert.alert(
                 'Not Enough Players',
-                'Add at least 2 players to start'
+                'Add at least 2 players to start',
             );
             return;
         }
@@ -101,86 +96,84 @@ const AddPlayersScreen = () => {
     };
 
     return (
-        <GestureHandlerRootView style={styles.root}>
-            <SafeAreaView style={styles.container} edges={['bottom']}>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        ref={inputRef}
-                        style={styles.input}
-                        placeholder="Player name..."
-                        placeholderTextColor={theme.colors.textMuted}
-                        value={playerName}
-                        onChangeText={setPlayerName}
-                        onSubmitEditing={handleAddPlayer}
-                        returnKeyType="done"
-                        autoCapitalize="words"
-                        maxLength={20}
-                    />
-                    <Pressable
-                        style={({ pressed }) => [
-                            styles.addButton,
-                            pressed && styles.buttonPressed,
-                            !playerName.trim() && styles.addButtonDisabled,
-                        ]}
-                        onPress={handleAddPlayer}
-                        disabled={!playerName.trim()}
-                    >
-                        <Text style={styles.addButtonText}>+</Text>
-                    </Pressable>
+        <SafeAreaView style={styles.container} edges={['bottom']}>
+            <View style={styles.inputContainer}>
+                <TextInput
+                    ref={inputRef}
+                    style={styles.input}
+                    placeholder="Player name..."
+                    placeholderTextColor={theme.colors.textMuted}
+                    value={playerName}
+                    onChangeText={setPlayerName}
+                    onSubmitEditing={handleAddPlayer}
+                    returnKeyType="done"
+                    autoCapitalize="words"
+                    maxLength={20}
+                />
+                <Pressable
+                    style={({ pressed }) => [
+                        styles.addButton,
+                        pressed && styles.buttonPressed,
+                        !playerName.trim() && styles.addButtonDisabled,
+                    ]}
+                    onPress={handleAddPlayer}
+                    disabled={!playerName.trim()}
+                >
+                    <Text style={styles.addButtonText}>+</Text>
+                </Pressable>
+            </View>
+
+            <View style={styles.listContainer}>
+                <View style={styles.countContainer}>
+                    <Text style={styles.playerCount}>
+                        {state.players.length} / {MAX_PLAYERS}
+                    </Text>
+                    <Text style={styles.playerLabel}>players</Text>
                 </View>
 
-                <View style={styles.listContainer}>
-                    <View style={styles.countContainer}>
-                        <Text style={styles.playerCount}>
-                            {state.players.length} / {MAX_PLAYERS}
+                {state.players.length === 0 ? (
+                    <View style={styles.emptyState}>
+                        <Text style={styles.emptyText}>
+                            No players yet!
                         </Text>
-                        <Text style={styles.playerLabel}>players</Text>
+                        <Text style={styles.emptySubtext}>
+                            Add at least 2 players to start the game
+                        </Text>
                     </View>
+                ) : (
+                    <FlatList
+                        data={state.players}
+                        keyExtractor={(item) => item.id}
+                        renderItem={renderPlayer}
+                        contentContainerStyle={styles.listContent}
+                        showsVerticalScrollIndicator={false}
+                    />
+                )}
+            </View>
 
-                    {state.players.length === 0 ? (
-                        <View style={styles.emptyState}>
-                            <Text style={styles.emptyText}>
-                                No players yet!
-                            </Text>
-                            <Text style={styles.emptySubtext}>
-                                Add at least 2 players to start the game
-                            </Text>
-                        </View>
-                    ) : (
-                        <FlatList
-                            data={state.players}
-                            keyExtractor={(item) => item.id}
-                            renderItem={renderPlayer}
-                            contentContainerStyle={styles.listContent}
-                            showsVerticalScrollIndicator={false}
-                        />
-                    )}
-                </View>
-
-                <View style={styles.footer}>
-                    <Pressable
-                        style={({ pressed }) => [
-                            styles.startButton,
-                            pressed && styles.buttonPressed,
+            <View style={styles.footer}>
+                <Pressable
+                    style={({ pressed }) => [
+                        styles.startButton,
+                        pressed && styles.buttonPressed,
+                        state.players.length < 2 &&
+                        styles.startButtonDisabled,
+                    ]}
+                    onPress={handleStartGame}
+                    disabled={state.players.length < 2}
+                >
+                    <Text
+                        style={[
+                            styles.startButtonText,
                             state.players.length < 2 &&
-                                styles.startButtonDisabled,
+                            styles.startButtonTextDisabled,
                         ]}
-                        onPress={handleStartGame}
-                        disabled={state.players.length < 2}
                     >
-                        <Text
-                            style={[
-                                styles.startButtonText,
-                                state.players.length < 2 &&
-                                    styles.startButtonTextDisabled,
-                            ]}
-                        >
-                            Start Game
-                        </Text>
-                    </Pressable>
-                </View>
-            </SafeAreaView>
-        </GestureHandlerRootView>
+                        Start Game
+                    </Text>
+                </Pressable>
+            </View>
+        </SafeAreaView>
     );
 };
 
