@@ -18,43 +18,49 @@ npm run web        # Start web version
 ## Architecture
 
 ### Tech Stack
+
 - **Expo SDK 54** with expo-router for file-based navigation
 - **React 19.1** / **React Native 0.81.5**
 - **TypeScript** with strict mode
 - **New Architecture enabled** (React Native's new rendering system)
 
 ### State Management
+
 Uses React Context API + useReducer pattern (not Redux):
 
 - `src/context/GameContext.tsx` - GameProvider wraps the app, provides `state` and `dispatch`
 - `src/types/index.ts` - Defines `Player`, `GameState`, and `GameAction` types
 
 **State shape:**
+
 ```typescript
 interface GameState {
-  players: Player[];
-  gameStarted: boolean;
-  gameEnded: boolean;
-  isAddingPlayer: boolean;
+    players: Player[];
+    gameStarted: boolean;
+    gameEnded: boolean;
+    isAddingPlayer: boolean;
 }
 ```
 
 **Key actions:** `ADD_PLAYER`, `REMOVE_PLAYER`, `EDIT_PLAYER`, `ADD_POINTS`, `RESET_SCORE`, `RESET_ALL`, `NEW_GAME`, `LOAD_GAME`, `END_GAME`, `QUIT_GAME`, `START_GAME`
 
 ### Navigation (expo-router)
+
 File-based routing in `app/` directory:
+
 - `app/_layout.tsx` - Root layout with Stack navigator and GameProvider
 - `app/index.tsx` - Home screen (new game / load game)
 - `app/add-players.tsx` - Player setup before game starts
 - `app/board.tsx` - Main game screen with score tracking
 
 ### Persistence
+
 - Uses `@react-native-async-storage/async-storage`
 - Storage key: `@scoreboard_game`
 - Stores `players` array as JSON string
 
 ### Key Libraries
-- `expo-haptics` - Tactile feedback on interactions
+
 - `react-native-gesture-handler` - Swipe-to-delete on player cards
 - `expo-router` - File-based navigation
 - `react-native-safe-area-context` - Safe area handling
