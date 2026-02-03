@@ -27,12 +27,13 @@ const BoardScreen = () => {
     const [scrollEnabled, setScrollEnabled] = useState(true);
     const [contentHeight, setContentHeight] = useState(0);
     const [containerHeight, setContainerHeight] = useState(0);
+    const [gameEnded, setGameEnded] = useState(false);
 
     const saveGame = async (): Promise<void> => {
         try {
             await AsyncStorage.setItem(
                 STORAGE_KEY,
-                JSON.stringify(state.players)
+                JSON.stringify(state.players),
             );
         } catch {
             Alert.alert('Error', 'Failed to save game');
@@ -47,7 +48,7 @@ const BoardScreen = () => {
     }, [contentHeight, containerHeight]);
 
     const handlePlayerTap = (player: Player): void => {
-        if (state.gameEnded) return;
+        if (gameEnded) return;
         setSelectedPlayer(player);
         setPointsInput('');
     };
@@ -86,11 +87,12 @@ const BoardScreen = () => {
                         setShowMenu(false);
                     },
                 },
-            ]
+            ],
         );
     };
 
     const handleEndGame = (): void => {
+        setGameEnded(true);
         setShowMenu(false);
     };
 
@@ -109,7 +111,7 @@ const BoardScreen = () => {
                         router.replace('/');
                     },
                 },
-            ]
+            ],
         );
     };
 
@@ -123,8 +125,10 @@ const BoardScreen = () => {
         dispatch({ type: 'RESET_ALL' });
     };
 
+    const playerScores = state.players.map(player => player.points)
+
     const renderPlayer = ({ item }: { item: Player }) => {
-        const isWinner = item.winner && state.gameEnded;
+        const isWinner = gameEnded && item.points === Math.max(...playerScores);
 
         return (
             <Pressable
@@ -134,11 +138,11 @@ const BoardScreen = () => {
                         backgroundColor: item.color + '20',
                         borderColor: item.color,
                     },
-                    pressed && !state.gameEnded && styles.playerCardPressed,
+                    pressed && !gameEnded && styles.playerCardPressed,
                     isWinner && styles.winnerCard,
                 ]}
                 onPress={() => handlePlayerTap(item)}
-                disabled={state.gameEnded}
+                disabled={gameEnded}
             >
                 <View style={styles.playerInfo}>
                     <View
@@ -163,9 +167,9 @@ const BoardScreen = () => {
         <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
             <View style={styles.header}>
                 <Text style={styles.headerTitle}>
-                    {state.gameEnded ? 'Game Over!' : 'Scoreboard'}
+                    {gameEnded ? 'Game Over!' : 'Scoreboard'}
                 </Text>
-                {!state.gameEnded && (
+                {!gameEnded && (
                     <Pressable
                         style={styles.menuButton}
                         onPress={() => setShowMenu(true)}
@@ -194,7 +198,7 @@ const BoardScreen = () => {
                 />
             </View>
 
-            {state.gameEnded && (
+            {gameEnded && (
                 <View style={styles.endedActions}>
                     <Pressable
                         style={({ pressed }) => [
@@ -229,7 +233,8 @@ const BoardScreen = () => {
                     style={styles.modalOverlay}
                     onPress={() => setSelectedPlayer(null)}
                 >
-                    <Pressable style={styles.modalContent} onPress={() => {}}>
+                    <Pressable style={styles.modalContent} onPress={() => {
+                    }}>
                         <View
                             style={[
                                 styles.modalPlayerDot,
@@ -291,7 +296,8 @@ const BoardScreen = () => {
                     style={styles.modalOverlay}
                     onPress={() => setShowMenu(false)}
                 >
-                    <Pressable style={styles.menuContent} onPress={() => {}}>
+                    <Pressable style={styles.menuContent} onPress={() => {
+                    }}>
                         <Text style={styles.menuTitle}>Game Menu</Text>
 
                         <Pressable
@@ -301,7 +307,7 @@ const BoardScreen = () => {
                                 setShowMenu(false);
                                 Alert.alert(
                                     'Saved!',
-                                    'Game saved successfully'
+                                    'Game saved successfully',
                                 );
                             }}
                         >
