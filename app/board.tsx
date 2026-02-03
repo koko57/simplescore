@@ -125,10 +125,10 @@ const BoardScreen = () => {
         dispatch({ type: 'RESET_ALL' });
     };
 
-    const playerScores = state.players.map(player => player.points)
+    const playerScores = state.players.map(player => player.score)
 
     const renderPlayer = ({ item }: { item: Player }) => {
-        const isWinner = gameEnded && item.points === Math.max(...playerScores);
+        const isWinner = gameEnded && item.score === Math.max(...playerScores);
 
         return (
             <Pressable
@@ -157,7 +157,7 @@ const BoardScreen = () => {
                     </Text>
                 </View>
                 <Text style={[styles.playerScore, { color: item.color }]}>
-                    {item.points}
+                    {item.score}
                 </Text>
             </Pressable>
         );
@@ -245,7 +245,7 @@ const BoardScreen = () => {
                             {selectedPlayer?.name}
                         </Text>
                         <Text style={styles.modalSubtitle}>
-                            Current score: {selectedPlayer?.points}
+                            Current score: {selectedPlayer?.score}
                         </Text>
 
                         <TextInput

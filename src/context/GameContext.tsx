@@ -18,7 +18,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
                 color: PLAYER_COLORS[
                     state.players.length % PLAYER_COLORS.length
                 ],
-                points: 0,
+                score: 0,
                 order: state.players.length,
             };
             return {
@@ -55,7 +55,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
                     player.id === action.payload.id
                         ? {
                               ...player,
-                              points: player.points + action.payload.points,
+                              score: player.score + action.payload.points,
                           }
                         : player
                 ),
@@ -66,7 +66,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
             return {
                 players: state.players.map((player) => ({
                     ...player,
-                    points: 0,
+                    score: 0,
                 })),
             };
         }
