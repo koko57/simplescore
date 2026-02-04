@@ -122,7 +122,7 @@ const BoardScreen = () => {
     const handleNewGameFromEnd = async (): Promise<void> => {
         await AsyncStorage.removeItem(STORAGE_KEY);
         dispatch({ type: 'NEW_GAME' });
-        router.navigate('/add-players');
+        router.replace('/add-players');
     };
 
     const handlePlayAgain = (): void => {

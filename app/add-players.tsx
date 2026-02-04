@@ -3,7 +3,6 @@ import {
     View,
     Text,
     TextInput,
-    Pressable,
     StyleSheet,
     FlatList,
     Alert,
@@ -16,6 +15,8 @@ import { MAX_PLAYERS } from '@/constants/colors';
 import { theme } from '@/constants/theme';
 import { Player } from '@/types';
 import { PlayerNameRow } from '@components/PlayerNameRow';
+import { AddPlayerInput } from '@components/AddPlayerInput';
+import { AddPlayerFooter } from '@components/AddPlayerFooter';
 
 const AddPlayersScreen = () => {
     const router = useRouter();
@@ -32,7 +33,7 @@ const AddPlayersScreen = () => {
         if (state.players.length >= MAX_PLAYERS) {
             Alert.alert(
                 'Limit Reached',
-                `Maximum ${MAX_PLAYERS} players allowed`
+                `Maximum ${MAX_PLAYERS} players allowed`,
             );
             return;
         }
@@ -70,7 +71,7 @@ const AddPlayersScreen = () => {
         if (state.players.length < 2) {
             Alert.alert(
                 'Not Enough Players',
-                'Add at least 2 players to start'
+                'Add at least 2 players to start',
             );
             return;
         }
@@ -96,31 +97,12 @@ const AddPlayersScreen = () => {
 
     return (
         <SafeAreaView style={styles.container} edges={['bottom']}>
-            <View style={styles.inputContainer}>
-                <TextInput
-                    ref={inputRef}
-                    style={styles.input}
-                    placeholder="Player name..."
-                    placeholderTextColor={theme.colors.textMuted}
-                    value={playerName}
-                    onChangeText={setPlayerName}
-                    onSubmitEditing={handleAddPlayer}
-                    returnKeyType="done"
-                    autoCapitalize="words"
-                    maxLength={20}
-                />
-                <Pressable
-                    style={({ pressed }) => [
-                        styles.addButton,
-                        pressed && styles.buttonPressed,
-                        !playerName.trim() && styles.addButtonDisabled,
-                    ]}
-                    onPress={handleAddPlayer}
-                    disabled={!playerName.trim()}
-                >
-                    <Text style={styles.addButtonText}>+</Text>
-                </Pressable>
-            </View>
+            <AddPlayerInput
+                inputRef={inputRef}
+                addPlayer={handleAddPlayer}
+                playerName={playerName}
+                setPlayerName={setPlayerName}
+            />
 
             <View style={styles.listContainer}>
                 <View style={styles.countContainer}>
@@ -148,75 +130,18 @@ const AddPlayersScreen = () => {
                 )}
             </View>
 
-            <View style={styles.footer}>
-                <Pressable
-                    style={({ pressed }) => [
-                        styles.startButton,
-                        pressed && styles.buttonPressed,
-                        state.players.length < 2 && styles.startButtonDisabled,
-                    ]}
-                    onPress={handleStartGame}
-                    disabled={state.players.length < 2}
-                >
-                    <Text
-                        style={[
-                            styles.startButtonText,
-                            state.players.length < 2 &&
-                                styles.startButtonTextDisabled,
-                        ]}
-                    >
-                        Start Game
-                    </Text>
-                </Pressable>
-            </View>
+            <AddPlayerFooter
+                handleStartGame={handleStartGame}
+                disabled={state.players.length < 2}
+            />
         </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
-    root: {
-        flex: 1,
-        backgroundColor: theme.colors.surface,
-    },
     container: {
         flex: 1,
         backgroundColor: theme.colors.surface,
-    },
-    inputContainer: {
-        flexDirection: 'row',
-        padding: theme.spacing.md,
-        gap: theme.spacing.sm,
-        backgroundColor: theme.colors.surface,
-    },
-    input: {
-        flex: 1,
-        height: 56,
-        backgroundColor: '#F5F0FC',
-        borderRadius: theme.borderRadius.md,
-        paddingHorizontal: theme.spacing.md,
-        fontSize: 18,
-        color: theme.colors.text,
-        fontWeight: '500',
-    },
-    addButton: {
-        width: 56,
-        height: 56,
-        backgroundColor: theme.colors.secondaryDark,
-        borderRadius: theme.borderRadius.md,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    addButtonDisabled: {
-        backgroundColor: theme.colors.border,
-    },
-    addButtonText: {
-        color: theme.colors.textOnPrimary,
-        fontSize: 28,
-        fontWeight: '600',
-    },
-    buttonPressed: {
-        transform: [{ scale: 0.95 }],
-        opacity: 0.9,
     },
     listContainer: {
         flex: 1,
@@ -241,57 +166,6 @@ const styles = StyleSheet.create({
     listContent: {
         paddingBottom: theme.spacing.md,
     },
-    playerItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: theme.colors.surface,
-        paddingVertical: theme.spacing.md,
-        paddingHorizontal: theme.spacing.md,
-        marginBottom: theme.spacing.sm,
-        borderRadius: theme.borderRadius.md,
-        ...theme.shadows.soft,
-    },
-    colorDot: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        marginRight: theme.spacing.md,
-    },
-    playerNameContainer: {
-        flex: 1,
-    },
-    playerName: {
-        fontSize: 18,
-        color: theme.colors.text,
-        fontWeight: '600',
-    },
-    editHint: {
-        fontSize: 13,
-        color: theme.colors.textMuted,
-        marginTop: 2,
-    },
-    editInput: {
-        flex: 1,
-        fontSize: 18,
-        color: theme.colors.text,
-        fontWeight: '600',
-        padding: 0,
-        borderBottomWidth: 2,
-        borderBottomColor: theme.colors.primary,
-    },
-    deleteAction: {
-        backgroundColor: theme.colors.danger,
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 90,
-        marginBottom: theme.spacing.sm,
-        borderRadius: theme.borderRadius.md,
-    },
-    deleteText: {
-        color: theme.colors.textOnPrimary,
-        fontWeight: '600',
-        fontSize: 15,
-    },
     emptyState: {
         flex: 1,
         justifyContent: 'center',
@@ -308,30 +182,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: theme.colors.textLight,
         textAlign: 'center',
-    },
-    footer: {
-        padding: theme.spacing.md,
-        backgroundColor: theme.colors.surface,
-    },
-    startButton: {
-        backgroundColor: theme.colors.successDark,
-        paddingVertical: 18,
-        borderRadius: theme.borderRadius.lg,
-        alignItems: 'center',
-        ...theme.shadows.soft,
-    },
-    startButtonDisabled: {
-        backgroundColor: theme.colors.border,
-        shadowOpacity: 0,
-        elevation: 0,
-    },
-    startButtonText: {
-        color: theme.colors.textOnPrimary,
-        fontSize: 20,
-        fontWeight: '700',
-    },
-    startButtonTextDisabled: {
-        color: theme.colors.textMuted,
     },
 });
 
