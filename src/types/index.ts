@@ -4,11 +4,11 @@ export type Player = {
     color: string;
     score: number;
     order: number;
-}
+};
 
 export type GameState = {
     players: Player[];
-}
+};
 
 export type GameAction =
     | { type: 'ADD_PLAYER'; payload: { name: string } }

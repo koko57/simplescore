@@ -32,7 +32,7 @@ const AddPlayersScreen = () => {
         if (state.players.length >= MAX_PLAYERS) {
             Alert.alert(
                 'Limit Reached',
-                `Maximum ${MAX_PLAYERS} players allowed`,
+                `Maximum ${MAX_PLAYERS} players allowed`
             );
             return;
         }
@@ -70,7 +70,7 @@ const AddPlayersScreen = () => {
         if (state.players.length < 2) {
             Alert.alert(
                 'Not Enough Players',
-                'Add at least 2 players to start',
+                'Add at least 2 players to start'
             );
             return;
         }
@@ -132,9 +132,7 @@ const AddPlayersScreen = () => {
 
                 {state.players.length === 0 ? (
                     <View style={styles.emptyState}>
-                        <Text style={styles.emptyText}>
-                            No players yet!
-                        </Text>
+                        <Text style={styles.emptyText}>No players yet!</Text>
                         <Text style={styles.emptySubtext}>
                             Add at least 2 players to start the game
                         </Text>
@@ -155,8 +153,7 @@ const AddPlayersScreen = () => {
                     style={({ pressed }) => [
                         styles.startButton,
                         pressed && styles.buttonPressed,
-                        state.players.length < 2 &&
-                        styles.startButtonDisabled,
+                        state.players.length < 2 && styles.startButtonDisabled,
                     ]}
                     onPress={handleStartGame}
                     disabled={state.players.length < 2}
@@ -165,7 +162,7 @@ const AddPlayersScreen = () => {
                         style={[
                             styles.startButtonText,
                             state.players.length < 2 &&
-                            styles.startButtonTextDisabled,
+                                styles.startButtonTextDisabled,
                         ]}
                     >
                         Start Game
@@ -183,6 +180,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
+        backgroundColor: theme.colors.surface,
     },
     inputContainer: {
         flexDirection: 'row',

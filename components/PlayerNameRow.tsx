@@ -10,7 +10,7 @@ type PlayerNameRowProps = {
     handleSaveEdit: () => void;
     handleStartEdit: (player: Player) => void;
     onRemove: (id: string) => void;
-}
+};
 
 export const PlayerNameRow = ({
     item,
