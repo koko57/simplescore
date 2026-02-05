@@ -1,12 +1,9 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { GameState, GameAction, Player } from '../types';
-import { PLAYER_COLORS } from '../constants/colors';
+import { GameState, GameAction, Player } from '@/types';
+import { PLAYER_COLORS } from '@/constants/colors';
 
 const initialState: GameState = {
     players: [],
-    gameStarted: false,
-    gameEnded: false,
-    isAddingPlayer: false,
 };
 
 const generateId = (): string =>
@@ -21,13 +18,11 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
                 color: PLAYER_COLORS[
                     state.players.length % PLAYER_COLORS.length
                 ],
-                points: 0,
+                score: 0,
                 order: state.players.length,
             };
             return {
-                ...state,
                 players: [...state.players, newPlayer],
-                isAddingPlayer: false,
             };
         }
 
@@ -41,15 +36,11 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
                 color: PLAYER_COLORS[index % PLAYER_COLORS.length],
                 order: index,
             }));
-            return {
-                ...state,
-                players: updated,
-            };
+            return { players: updated };
         }
 
         case 'EDIT_PLAYER': {
             return {
-                ...state,
                 players: state.players.map((player) =>
                     player.id === action.payload.id
                         ? { ...player, name: action.payload.name }
@@ -60,24 +51,12 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
 
         case 'ADD_POINTS': {
             return {
-                ...state,
                 players: state.players.map((player) =>
                     player.id === action.payload.id
                         ? {
                               ...player,
-                              points: player.points + action.payload.points,
+                              score: player.score + action.payload.points,
                           }
-                        : player
-                ),
-            };
-        }
-
-        case 'RESET_SCORE': {
-            return {
-                ...state,
-                players: state.players.map((player) =>
-                    player.id === action.payload.id
-                        ? { ...player, points: 0 }
                         : player
                 ),
             };
@@ -85,13 +64,10 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
 
         case 'RESET_ALL': {
             return {
-                ...state,
                 players: state.players.map((player) => ({
                     ...player,
-                    points: 0,
-                    winner: false,
+                    score: 0,
                 })),
-                gameEnded: false,
             };
         }
 
@@ -103,42 +79,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
 
         case 'LOAD_GAME': {
             return {
-                ...state,
                 players: action.payload.players,
-                gameStarted: true,
-                gameEnded: false,
-            };
-        }
-
-        case 'START_GAME': {
-            return {
-                ...state,
-                gameStarted: true,
-            };
-        }
-
-        case 'END_GAME': {
-            const maxPoints = Math.max(...state.players.map((p) => p.points));
-            return {
-                ...state,
-                gameEnded: true,
-                players: state.players.map((player) => ({
-                    ...player,
-                    winner: player.points === maxPoints,
-                })),
-            };
-        }
-
-        case 'QUIT_GAME': {
-            return {
-                ...initialState,
-            };
-        }
-
-        case 'TOGGLE_ADD_PLAYER_MODE': {
-            return {
-                ...state,
-                isAddingPlayer: !state.isAddingPlayer,
             };
         }
 

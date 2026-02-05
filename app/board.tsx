@@ -6,15 +6,18 @@ import {
     StyleSheet,
     FlatList,
     Modal,
-    TextInput,
     Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useGame } from '../src/context/GameContext';
-import { Player } from '../src/types';
-import { theme } from '../src/constants/theme';
+import { useGame } from '@/context/GameContext';
+import { Player } from '@/types';
+import { theme } from '@/constants/theme';
+import { AddPointsModal } from '@components/AddPointsModal';
+import { PlayerRow } from '@components/PlayerRow';
+import { EndGameFooter } from '@components/EndGameFooter';
+import { MenuModal } from '@components/MenuModal';
 
 const STORAGE_KEY = '@scoreboard_game';
 
@@ -22,11 +25,18 @@ const BoardScreen = () => {
     const router = useRouter();
     const { state, dispatch } = useGame();
     const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
-    const [pointsInput, setPointsInput] = useState('');
     const [showMenu, setShowMenu] = useState(false);
     const [scrollEnabled, setScrollEnabled] = useState(true);
     const [contentHeight, setContentHeight] = useState(0);
     const [containerHeight, setContainerHeight] = useState(0);
+    const [gameEnded, setGameEnded] = useState(false);
+
+    // Disable scroll when all content fits on screen
+    useEffect(() => {
+        if (contentHeight > 0 && containerHeight > 0) {
+            setScrollEnabled(contentHeight > containerHeight);
+        }
+    }, [contentHeight, containerHeight]);
 
     const saveGame = async (): Promise<void> => {
         try {
@@ -39,23 +49,20 @@ const BoardScreen = () => {
         }
     };
 
-    // Disable scroll when all content fits on screen
-    useEffect(() => {
-        if (contentHeight > 0 && containerHeight > 0) {
-            setScrollEnabled(contentHeight > containerHeight);
-        }
-    }, [contentHeight, containerHeight]);
-
     const handlePlayerTap = (player: Player): void => {
-        if (state.gameEnded) return;
+        if (gameEnded) return;
         setSelectedPlayer(player);
-        setPointsInput('');
     };
 
-    const handleAddPoints = (subtract: boolean = false): void => {
+    const onClose = (): void => setSelectedPlayer(null);
+
+    const handleAddPoints = (
+        value: string,
+        subtract: boolean = false
+    ): void => {
         if (!selectedPlayer) return;
 
-        const points = parseInt(pointsInput, 10);
+        const points = parseInt(value, 10);
         if (isNaN(points) || points === 0) {
             setSelectedPlayer(null);
             return;
@@ -68,14 +75,6 @@ const BoardScreen = () => {
                 points: subtract ? -points : points,
             },
         });
-        setSelectedPlayer(null);
-        setPointsInput('');
-    };
-
-    const handleResetPlayer = (): void => {
-        if (!selectedPlayer) return;
-
-        dispatch({ type: 'RESET_SCORE', payload: { id: selectedPlayer.id } });
         setSelectedPlayer(null);
     };
 
@@ -98,11 +97,11 @@ const BoardScreen = () => {
     };
 
     const handleEndGame = (): void => {
-        dispatch({ type: 'END_GAME' });
+        setGameEnded(true);
         setShowMenu(false);
     };
 
-    const handleQuit = (): void => {
+    const handleQuitGame = async (): Promise<void> => {
         Alert.alert(
             'Quit Game',
             'Are you sure? Any unsaved progress will be lost.',
@@ -111,9 +110,8 @@ const BoardScreen = () => {
                 {
                     text: 'Quit',
                     style: 'destructive',
-                    onPress: async () => {
-                        await AsyncStorage.removeItem(STORAGE_KEY);
-                        dispatch({ type: 'QUIT_GAME' });
+                    onPress: () => {
+                        dispatch({ type: 'NEW_GAME' });
                         router.replace('/');
                     },
                 },
@@ -129,51 +127,37 @@ const BoardScreen = () => {
 
     const handlePlayAgain = (): void => {
         dispatch({ type: 'RESET_ALL' });
+        setGameEnded(false);
     };
 
+    const playerScores = state.players.map((player) => player.score);
+
     const renderPlayer = ({ item }: { item: Player }) => {
-        const isWinner = item.winner && state.gameEnded;
+        const isWinner = gameEnded && item.score === Math.max(...playerScores);
 
         return (
-            <Pressable
-                style={({ pressed }) => [
-                    styles.playerCard,
-                    {
-                        backgroundColor: item.color + '20',
-                        borderColor: item.color,
-                    },
-                    pressed && !state.gameEnded && styles.playerCardPressed,
-                    isWinner && styles.winnerCard,
-                ]}
-                onPress={() => handlePlayerTap(item)}
-                disabled={state.gameEnded}
-            >
-                <View style={styles.playerInfo}>
-                    <View
-                        style={[
-                            styles.colorDot,
-                            { backgroundColor: item.color },
-                        ]}
-                    />
-                    <Text style={styles.playerName}>
-                        {item.name}
-                        {isWinner && ' (Winner)'}
-                    </Text>
-                </View>
-                <Text style={[styles.playerScore, { color: item.color }]}>
-                    {item.points}
-                </Text>
-            </Pressable>
+            <PlayerRow
+                item={item}
+                handlePlayerTap={handlePlayerTap}
+                disabled={gameEnded}
+                isWinner={isWinner}
+            />
         );
+    };
+
+    const handleSaveGame = () => {
+        saveGame();
+        setShowMenu(false);
+        Alert.alert('Saved!', 'Game saved successfully');
     };
 
     return (
         <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
             <View style={styles.header}>
                 <Text style={styles.headerTitle}>
-                    {state.gameEnded ? 'Game Over!' : 'Scoreboard'}
+                    {gameEnded ? 'Game Over!' : 'Scoreboard'}
                 </Text>
-                {!state.gameEnded && (
+                {!gameEnded && (
                     <Pressable
                         style={styles.menuButton}
                         onPress={() => setShowMenu(true)}
@@ -202,164 +186,27 @@ const BoardScreen = () => {
                 />
             </View>
 
-            {/* Game Ended Actions */}
-            {state.gameEnded && (
-                <View style={styles.endedActions}>
-                    <Pressable
-                        style={({ pressed }) => [
-                            styles.endedButton,
-                            styles.playAgainButton,
-                            pressed && styles.buttonPressed,
-                        ]}
-                        onPress={handlePlayAgain}
-                    >
-                        <Text style={styles.playAgainText}>Play Again</Text>
-                    </Pressable>
-                    <Pressable
-                        style={({ pressed }) => [
-                            styles.endedButton,
-                            styles.newGameButton,
-                            pressed && styles.buttonPressed,
-                        ]}
-                        onPress={handleNewGameFromEnd}
-                    >
-                        <Text style={styles.newGameText}>New Game</Text>
-                    </Pressable>
-                </View>
+            {gameEnded && (
+                <EndGameFooter
+                    playAgain={handlePlayAgain}
+                    newGame={handleNewGameFromEnd}
+                />
             )}
 
-            <Modal
-                visible={selectedPlayer !== null}
-                transparent
-                animationType="fade"
-                onRequestClose={() => setSelectedPlayer(null)}
-            >
-                <Pressable
-                    style={styles.modalOverlay}
-                    onPress={() => setSelectedPlayer(null)}
-                >
-                    <Pressable style={styles.modalContent} onPress={() => {}}>
-                        <View
-                            style={[
-                                styles.modalPlayerDot,
-                                { backgroundColor: selectedPlayer?.color },
-                            ]}
-                        />
-                        <Text style={styles.modalTitle}>
-                            {selectedPlayer?.name}
-                        </Text>
-                        <Text style={styles.modalSubtitle}>
-                            Current score: {selectedPlayer?.points}
-                        </Text>
+            <AddPointsModal
+                addPoints={handleAddPoints}
+                selectedPlayer={selectedPlayer}
+                onClose={onClose}
+            />
 
-                        <TextInput
-                            style={styles.pointsInput}
-                            placeholder="0"
-                            placeholderTextColor={theme.colors.textMuted}
-                            keyboardType="number-pad"
-                            value={pointsInput}
-                            onChangeText={setPointsInput}
-                            autoFocus
-                        />
-
-                        <View style={styles.modalButtons}>
-                            <Pressable
-                                style={({ pressed }) => [
-                                    styles.modalButton,
-                                    styles.subtractButton,
-                                    pressed && styles.buttonPressed,
-                                ]}
-                                onPress={() => handleAddPoints(true)}
-                            >
-                                <Text style={styles.subtractText}>
-                                    − Subtract
-                                </Text>
-                            </Pressable>
-                            <Pressable
-                                style={({ pressed }) => [
-                                    styles.modalButton,
-                                    styles.addPointsButton,
-                                    pressed && styles.buttonPressed,
-                                ]}
-                                onPress={() => handleAddPoints(false)}
-                            >
-                                <Text style={styles.addPointsText}>+ Add</Text>
-                            </Pressable>
-                        </View>
-
-                        <Pressable
-                            style={styles.resetButton}
-                            onPress={handleResetPlayer}
-                        >
-                            <Text style={styles.resetText}>Reset to 0</Text>
-                        </Pressable>
-                    </Pressable>
-                </Pressable>
-            </Modal>
-
-            <Modal
+            <MenuModal
+                onClose={() => setShowMenu(false)}
+                saveGame={handleSaveGame}
+                resetScores={handleResetAll}
+                endGame={handleEndGame}
+                quitGame={handleQuitGame}
                 visible={showMenu}
-                transparent
-                animationType="fade"
-                onRequestClose={() => setShowMenu(false)}
-            >
-                <Pressable
-                    style={styles.modalOverlay}
-                    onPress={() => setShowMenu(false)}
-                >
-                    <Pressable style={styles.menuContent} onPress={() => {}}>
-                        <Text style={styles.menuTitle}>Game Menu</Text>
-
-                        <Pressable
-                            style={styles.menuItem}
-                            onPress={() => {
-                                saveGame();
-                                setShowMenu(false);
-                                Alert.alert(
-                                    'Saved!',
-                                    'Game saved successfully'
-                                );
-                            }}
-                        >
-                            <Text style={styles.menuItemText}>Save Game</Text>
-                        </Pressable>
-
-                        <Pressable
-                            style={styles.menuItem}
-                            onPress={handleResetAll}
-                        >
-                            <Text style={styles.menuItemText}>
-                                Reset All Scores
-                            </Text>
-                        </Pressable>
-
-                        <Pressable
-                            style={styles.menuItem}
-                            onPress={handleEndGame}
-                        >
-                            <Text style={styles.menuItemText}>End Game</Text>
-                        </Pressable>
-
-                        <Pressable
-                            style={[styles.menuItem, styles.quitItem]}
-                            onPress={handleQuit}
-                        >
-                            <Text
-                                style={[styles.menuItemText, styles.quitText]}
-                            >
-                                Quit Game
-                            </Text>
-                        </Pressable>
-
-                        <Pressable
-                            style={styles.cancelItem}
-                            onPress={() => setShowMenu(false)}
-                        >
-                            <Text style={styles.cancelText}>Cancel</Text>
-                        </Pressable>
-                    </Pressable>
-                </Pressable>
-            </Modal>
+            />
         </SafeAreaView>
     );
 };
@@ -398,206 +245,6 @@ const styles = StyleSheet.create({
     },
     listContent: {
         padding: theme.spacing.md,
-    },
-    playerCard: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: theme.spacing.lg,
-        marginBottom: theme.spacing.sm,
-        borderRadius: theme.borderRadius.lg,
-        borderWidth: 2,
-    },
-    playerCardPressed: {
-        transform: [{ scale: 0.98 }],
-        opacity: 0.9,
-    },
-    winnerCard: {
-        backgroundColor: theme.colors.accent + '40',
-        borderColor: theme.colors.accentDark,
-        borderWidth: 3,
-    },
-    playerInfo: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        flex: 1,
-    },
-    colorDot: {
-        width: 16,
-        height: 16,
-        borderRadius: 8,
-        marginRight: theme.spacing.sm,
-    },
-    playerName: {
-        fontSize: 20,
-        fontWeight: '700',
-        color: theme.colors.text,
-    },
-    playerScore: {
-        fontSize: 36,
-        fontWeight: '800',
-    },
-    endedActions: {
-        flexDirection: 'row',
-        padding: theme.spacing.md,
-        gap: theme.spacing.sm,
-        backgroundColor: theme.colors.surface,
-    },
-    endedButton: {
-        flex: 1,
-        paddingVertical: 16,
-        borderRadius: theme.borderRadius.md,
-        alignItems: 'center',
-    },
-    playAgainButton: {
-        backgroundColor: theme.colors.successDark,
-    },
-    playAgainText: {
-        color: theme.colors.textOnPrimary,
-        fontSize: 18,
-        fontWeight: '700',
-    },
-    newGameButton: {
-        backgroundColor: theme.colors.surface,
-        borderWidth: 2,
-        borderColor: theme.colors.border,
-    },
-    newGameText: {
-        color: theme.colors.text,
-        fontSize: 18,
-        fontWeight: '700',
-    },
-    buttonPressed: {
-        transform: [{ scale: 0.97 }],
-        opacity: 0.9,
-    },
-    modalOverlay: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    modalContent: {
-        backgroundColor: theme.colors.surface,
-        borderRadius: theme.borderRadius.xl,
-        padding: theme.spacing.lg,
-        width: '85%',
-        maxWidth: 340,
-        alignItems: 'center',
-        ...theme.shadows.card,
-    },
-    modalPlayerDot: {
-        width: 48,
-        height: 48,
-        borderRadius: 24,
-        marginBottom: theme.spacing.sm,
-    },
-    modalTitle: {
-        fontSize: 24,
-        fontWeight: '800',
-        color: theme.colors.text,
-        textAlign: 'center',
-        marginBottom: theme.spacing.xs,
-    },
-    modalSubtitle: {
-        fontSize: 16,
-        color: theme.colors.textLight,
-        textAlign: 'center',
-        marginBottom: theme.spacing.lg,
-    },
-    pointsInput: {
-        width: '100%',
-        backgroundColor: '#F5F0FC',
-        borderRadius: theme.borderRadius.md,
-        paddingVertical: theme.spacing.md,
-        paddingHorizontal: theme.spacing.md,
-        fontSize: 32,
-        fontWeight: '700',
-        textAlign: 'center',
-        color: theme.colors.text,
-        marginBottom: theme.spacing.md,
-    },
-    modalButtons: {
-        flexDirection: 'row',
-        gap: theme.spacing.sm,
-        marginBottom: theme.spacing.md,
-        width: '100%',
-    },
-    modalButton: {
-        flex: 1,
-        paddingVertical: 16,
-        borderRadius: theme.borderRadius.md,
-        alignItems: 'center',
-    },
-    subtractButton: {
-        backgroundColor: theme.colors.dangerDark,
-    },
-    subtractText: {
-        color: theme.colors.textOnPrimary,
-        fontSize: 17,
-        fontWeight: '700',
-    },
-    addPointsButton: {
-        backgroundColor: theme.colors.successDark,
-    },
-    addPointsText: {
-        color: theme.colors.textOnPrimary,
-        fontSize: 17,
-        fontWeight: '700',
-    },
-    resetButton: {
-        paddingVertical: theme.spacing.sm,
-        alignItems: 'center',
-    },
-    resetText: {
-        color: theme.colors.textLight,
-        fontSize: 15,
-        fontWeight: '500',
-    },
-    menuContent: {
-        backgroundColor: theme.colors.backgroundLight,
-        borderRadius: theme.borderRadius.xl,
-        width: '85%',
-        maxWidth: 340,
-        overflow: 'hidden',
-        ...theme.shadows.card,
-    },
-    menuTitle: {
-        fontSize: 20,
-        fontWeight: '800',
-        color: theme.colors.text,
-        textAlign: 'center',
-        padding: theme.spacing.lg,
-    },
-    menuItem: {
-        paddingVertical: theme.spacing.md,
-        paddingHorizontal: theme.spacing.lg,
-        borderTopWidth: 1,
-        borderTopColor: theme.colors.border,
-    },
-    menuItemText: {
-        fontSize: 17,
-        color: theme.colors.text,
-        textAlign: 'center',
-        fontWeight: '600',
-    },
-    quitItem: {
-        backgroundColor: theme.colors.danger + '20',
-    },
-    quitText: {
-        color: theme.colors.dangerDark,
-    },
-    cancelItem: {
-        paddingVertical: theme.spacing.md,
-        paddingHorizontal: theme.spacing.lg,
-        backgroundColor: theme.colors.background,
-        borderTopWidth: 1,
-        borderTopColor: theme.colors.border,
-    },
-    cancelText: {
-        fontSize: 17,
-        color: theme.colors.textLight,
-        textAlign: 'center',
-        fontWeight: '600',
     },
 });
 
