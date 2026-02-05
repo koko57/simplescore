@@ -7,6 +7,7 @@ import { useGame } from '@/context/GameContext';
 import { Player } from '@/types';
 import { theme } from '@/constants/theme';
 import { STORAGE_KEY } from '@/constants';
+import { ACTION_TYPES } from '@/constants/actionTypes';
 
 const HomeScreen = () => {
     const router = useRouter();
@@ -28,7 +29,7 @@ const HomeScreen = () => {
     );
 
     const handleNewGame = (): void => {
-        dispatch({ type: 'NEW_GAME' });
+        dispatch({ type: ACTION_TYPES.NEW_GAME });
         router.push('/add-players');
     };
 
@@ -37,7 +38,7 @@ const HomeScreen = () => {
             const saved = await AsyncStorage.getItem(STORAGE_KEY);
             if (saved) {
                 const players: Player[] = JSON.parse(saved);
-                dispatch({ type: 'LOAD_GAME', payload: { players } });
+                dispatch({ type: ACTION_TYPES.LOAD_GAME, payload: { players } });
                 router.push('/board');
             }
         } catch {

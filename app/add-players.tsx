@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useGame } from '@/context/GameContext';
 import { MAX_PLAYERS } from '@/constants/colors';
 import { theme } from '@/constants/theme';
+import { ACTION_TYPES } from '@/constants/actionTypes';
 import { Player } from '@/types';
 import { PlayerNameRow } from '@components/PlayerNameRow';
 import { AddPlayerInput } from '@components/AddPlayerInput';
@@ -40,13 +41,13 @@ const AddPlayersScreen = () => {
             return;
         }
 
-        dispatch({ type: 'ADD_PLAYER', payload: { name: trimmedName } });
+        dispatch({ type: ACTION_TYPES.ADD_PLAYER, payload: { name: trimmedName } });
         setPlayerName('');
         inputRef.current?.focus();
     };
 
     const handleRemovePlayer = (id: string): void => {
-        dispatch({ type: 'REMOVE_PLAYER', payload: { id } });
+        dispatch({ type: ACTION_TYPES.REMOVE_PLAYER, payload: { id } });
     };
 
     const handleStartEdit = (player: Player): void => {
@@ -61,7 +62,7 @@ const AddPlayersScreen = () => {
         }
 
         dispatch({
-            type: 'EDIT_PLAYER',
+            type: ACTION_TYPES.EDIT_PLAYER,
             payload: { id: editingId, name: editName.trim() },
         });
         setEditingId(null);

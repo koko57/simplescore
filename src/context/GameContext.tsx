@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 import { GameState, GameAction, Player } from '@/types';
 import { PLAYER_COLORS } from '@/constants/colors';
+import { ACTION_TYPES } from '@/constants/actionTypes';
 
 const initialState: GameState = {
     players: [],
@@ -11,7 +12,7 @@ const generateId = (): string =>
 
 const gameReducer = (state: GameState, action: GameAction): GameState => {
     switch (action.type) {
-        case 'ADD_PLAYER': {
+        case ACTION_TYPES.ADD_PLAYER: {
             const newPlayer: Player = {
                 id: generateId(),
                 name: action.payload.name,
@@ -24,7 +25,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
             };
         }
 
-        case 'REMOVE_PLAYER': {
+        case ACTION_TYPES.REMOVE_PLAYER: {
             const filtered = state.players.filter(
                 (p) => p.id !== action.payload.id,
             );
@@ -37,7 +38,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
             return { players: updated };
         }
 
-        case 'EDIT_PLAYER': {
+        case ACTION_TYPES.EDIT_PLAYER: {
             return {
                 players: state.players.map((player) =>
                     player.id === action.payload.id
@@ -47,7 +48,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
             };
         }
 
-        case 'ADD_POINTS': {
+        case ACTION_TYPES.ADD_POINTS: {
             return {
                 players: state.players.map((player) =>
                     player.id === action.payload.id
@@ -60,7 +61,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
             };
         }
 
-        case 'RESET_ALL': {
+        case ACTION_TYPES.RESET_ALL: {
             return {
                 players: state.players.map((player) => ({
                     ...player,
@@ -69,13 +70,13 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
             };
         }
 
-        case 'NEW_GAME': {
+        case ACTION_TYPES.NEW_GAME: {
             return {
                 ...initialState,
             };
         }
 
-        case 'LOAD_GAME': {
+        case ACTION_TYPES.LOAD_GAME: {
             return {
                 players: action.payload.players,
             };
