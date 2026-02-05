@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         color: theme.colors.text,
         marginBottom: theme.spacing.md,
+        textAlign: 'center',
     },
     modalButtons: {
         flexDirection: 'row',

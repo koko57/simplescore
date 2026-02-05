@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     button: {
         paddingVertical: 20,
         paddingHorizontal: theme.spacing.xl,
-        borderRadius: theme.borderRadius.lg,
+        borderRadius: theme.borderRadius.md,
         alignItems: 'center',
     },
     buttonPressed: {

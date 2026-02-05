@@ -230,9 +230,9 @@ const styles = StyleSheet.create({
         color: theme.colors.text,
     },
     menuButton: {
-        width: 44,
-        height: 44,
-        borderRadius: 22,
+        width: 56,
+        height: 56,
+        borderRadius: theme.borderRadius.md,
         backgroundColor: theme.colors.background,
         justifyContent: 'center',
         alignItems: 'center',
