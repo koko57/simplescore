@@ -232,8 +232,6 @@ const styles = StyleSheet.create({
     menuButton: {
         width: 56,
         height: 56,
-        borderRadius: theme.borderRadius.md,
-        backgroundColor: theme.colors.background,
         justifyContent: 'center',
         alignItems: 'center',
     },

@@ -7,7 +7,9 @@ import {
     FlatList,
     Alert,
     Keyboard,
+    Pressable,
 } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useGame } from '@/context/GameContext';
@@ -37,12 +39,15 @@ const AddPlayersScreen = () => {
         if (state.players.length >= MAX_PLAYERS) {
             Alert.alert(
                 'Limit Reached',
-                `Maximum ${MAX_PLAYERS} players allowed`,
+                `Maximum ${MAX_PLAYERS} players allowed`
             );
             return;
         }
 
-        dispatch({ type: ACTION_TYPES.ADD_PLAYER, payload: { name: trimmedName } });
+        dispatch({
+            type: ACTION_TYPES.ADD_PLAYER,
+            payload: { name: trimmedName },
+        });
         setPlayerName('');
         inputRef.current?.focus();
     };
@@ -75,7 +80,7 @@ const AddPlayersScreen = () => {
         if (notEnoughPlayers) {
             Alert.alert(
                 'Not Enough Players',
-                'Add at least 2 players to start',
+                'Add at least 2 players to start'
             );
             return;
         }
@@ -101,6 +106,19 @@ const AddPlayersScreen = () => {
 
     return (
         <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+            <View style={styles.header}>
+                <Pressable
+                    style={styles.backButton}
+                    onPress={() => router.back()}
+                >
+                    <Ionicons
+                        name="chevron-back"
+                        size={24}
+                        color={theme.colors.text}
+                    />
+                </Pressable>
+            </View>
+
             <AddPlayerInput
                 inputRef={inputRef}
                 addPlayer={handleAddPlayer}
@@ -146,6 +164,16 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: theme.colors.surface,
+    },
+    header: {
+        paddingHorizontal: theme.spacing.sm,
+        paddingTop: theme.spacing.xs,
+    },
+    backButton: {
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     listContainer: {
         flex: 1,

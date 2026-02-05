@@ -39,7 +39,10 @@ const HomeScreen = () => {
             const saved = await AsyncStorage.getItem(STORAGE_KEY);
             if (saved) {
                 const players: Player[] = JSON.parse(saved);
-                dispatch({ type: ACTION_TYPES.LOAD_GAME, payload: { players } });
+                dispatch({
+                    type: ACTION_TYPES.LOAD_GAME,
+                    payload: { players },
+                });
                 router.push(ROUTES.BOARD);
             }
         } catch {
