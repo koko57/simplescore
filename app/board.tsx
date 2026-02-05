@@ -15,6 +15,7 @@ import { Player } from '@/types';
 import { STORAGE_KEY } from '@/constants';
 import { theme } from '@/constants/theme';
 import { ACTION_TYPES } from '@/constants/actionTypes';
+import { ROUTES } from '@/constants/routes';
 import { AddPointsModal } from '@components/AddPointsModal';
 import { PlayerRow } from '@components/PlayerRow';
 import { EndGameFooter } from '@components/EndGameFooter';
@@ -111,7 +112,7 @@ const BoardScreen = () => {
                     style: 'destructive',
                     onPress: () => {
                         dispatch({ type: ACTION_TYPES.NEW_GAME });
-                        router.replace('/');
+                        router.replace(ROUTES.HOME);
                     },
                 },
             ]
@@ -121,7 +122,7 @@ const BoardScreen = () => {
     const handleNewGameFromEnd = async (): Promise<void> => {
         await AsyncStorage.removeItem(STORAGE_KEY);
         dispatch({ type: ACTION_TYPES.NEW_GAME });
-        router.replace('/add-players');
+        router.replace(ROUTES.ADD_PLAYERS);
     };
 
     const handlePlayAgain = (): void => {

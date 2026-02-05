@@ -14,6 +14,7 @@ import { useGame } from '@/context/GameContext';
 import { MAX_PLAYERS } from '@/constants/colors';
 import { theme } from '@/constants/theme';
 import { ACTION_TYPES } from '@/constants/actionTypes';
+import { ROUTES } from '@/constants/routes';
 import { Player } from '@/types';
 import { PlayerNameRow } from '@components/PlayerNameRow';
 import { AddPlayerInput } from '@components/AddPlayerInput';
@@ -79,7 +80,7 @@ const AddPlayersScreen = () => {
             return;
         }
 
-        router.replace('/board');
+        router.replace(ROUTES.BOARD);
     };
 
     const renderPlayer = ({ item }: { item: Player }) => {

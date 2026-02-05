@@ -8,6 +8,7 @@ import { Player } from '@/types';
 import { theme } from '@/constants/theme';
 import { STORAGE_KEY } from '@/constants';
 import { ACTION_TYPES } from '@/constants/actionTypes';
+import { ROUTES } from '@/constants/routes';
 
 const HomeScreen = () => {
     const router = useRouter();
@@ -30,7 +31,7 @@ const HomeScreen = () => {
 
     const handleNewGame = (): void => {
         dispatch({ type: ACTION_TYPES.NEW_GAME });
-        router.push('/add-players');
+        router.push(ROUTES.ADD_PLAYERS);
     };
 
     const handleLoadGame = async (): Promise<void> => {
@@ -39,7 +40,7 @@ const HomeScreen = () => {
             if (saved) {
                 const players: Player[] = JSON.parse(saved);
                 dispatch({ type: ACTION_TYPES.LOAD_GAME, payload: { players } });
-                router.push('/board');
+                router.push(ROUTES.BOARD);
             }
         } catch {
             Alert.alert('Error', 'Failed to load saved game');
