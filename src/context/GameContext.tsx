@@ -15,9 +15,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
             const newPlayer: Player = {
                 id: generateId(),
                 name: action.payload.name,
-                color: PLAYER_COLORS[
-                    state.players.length % PLAYER_COLORS.length
-                ],
+                color: PLAYER_COLORS[state.players.length % PLAYER_COLORS.length],
                 score: 0,
                 order: state.players.length,
             };
@@ -28,7 +26,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
 
         case 'REMOVE_PLAYER': {
             const filtered = state.players.filter(
-                (p) => p.id !== action.payload.id
+                (p) => p.id !== action.payload.id,
             );
             // Reassign colors and order after removal
             const updated = filtered.map((player, index) => ({
@@ -44,7 +42,7 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
                 players: state.players.map((player) =>
                     player.id === action.payload.id
                         ? { ...player, name: action.payload.name }
-                        : player
+                        : player,
                 ),
             };
         }
@@ -54,10 +52,10 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
                 players: state.players.map((player) =>
                     player.id === action.payload.id
                         ? {
-                              ...player,
-                              score: player.score + action.payload.points,
-                          }
-                        : player
+                            ...player,
+                            score: player.score + action.payload.points,
+                        }
+                        : player,
                 ),
             };
         }
@@ -88,14 +86,14 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
     }
 };
 
-interface GameContextType {
+type GameContextType = {
     state: GameState;
     dispatch: React.Dispatch<GameAction>;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
-interface GameProviderProps {
+type GameProviderProps = {
     children: ReactNode;
 }
 
