@@ -26,6 +26,8 @@ const AddPlayersScreen = () => {
     const [editName, setEditName] = useState('');
     const inputRef = useRef<TextInput>(null);
 
+    const notEnoughPlayers = state.players.length < 2;
+
     const handleAddPlayer = (): void => {
         const trimmedName = playerName.trim();
         if (!trimmedName) return;
@@ -68,7 +70,7 @@ const AddPlayersScreen = () => {
     };
 
     const handleStartGame = (): void => {
-        if (state.players.length < 2) {
+        if (notEnoughPlayers) {
             Alert.alert(
                 'Not Enough Players',
                 'Add at least 2 players to start',
@@ -96,7 +98,7 @@ const AddPlayersScreen = () => {
     };
 
     return (
-        <SafeAreaView style={styles.container} edges={['bottom']}>
+        <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
             <AddPlayerInput
                 inputRef={inputRef}
                 addPlayer={handleAddPlayer}
@@ -132,7 +134,7 @@ const AddPlayersScreen = () => {
 
             <AddPlayerFooter
                 handleStartGame={handleStartGame}
-                disabled={state.players.length < 2}
+                disabled={notEnoughPlayers}
             />
         </SafeAreaView>
     );

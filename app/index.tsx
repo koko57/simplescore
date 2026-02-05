@@ -6,8 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGame } from '@/context/GameContext';
 import { Player } from '@/types';
 import { theme } from '@/constants/theme';
-
-const STORAGE_KEY = '@scoreboard_game';
+import { STORAGE_KEY } from '@/constants';
 
 const HomeScreen = () => {
     const router = useRouter();

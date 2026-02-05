@@ -5,7 +5,6 @@ import {
     Pressable,
     StyleSheet,
     FlatList,
-    Modal,
     Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -13,13 +12,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGame } from '@/context/GameContext';
 import { Player } from '@/types';
+import { STORAGE_KEY } from '@/constants';
 import { theme } from '@/constants/theme';
 import { AddPointsModal } from '@components/AddPointsModal';
 import { PlayerRow } from '@components/PlayerRow';
 import { EndGameFooter } from '@components/EndGameFooter';
 import { MenuModal } from '@components/MenuModal';
-
-const STORAGE_KEY = '@scoreboard_game';
 
 const BoardScreen = () => {
     const router = useRouter();

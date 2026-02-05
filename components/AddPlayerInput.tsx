@@ -9,7 +9,12 @@ type AddPlayerInputProps = {
     setPlayerName: (name: string) => void;
 };
 
-export const AddPlayerInput = ({ inputRef, addPlayer, playerName, setPlayerName }: AddPlayerInputProps) => {
+export const AddPlayerInput = ({
+    inputRef,
+    addPlayer,
+    playerName,
+    setPlayerName,
+}: AddPlayerInputProps) => {
     return (
         <View style={styles.inputContainer}>
             <TextInput
@@ -49,7 +54,7 @@ const styles = StyleSheet.create({
     input: {
         flex: 1,
         height: 56,
-        backgroundColor: '#F5F0FC',
+        backgroundColor: theme.colors.backgroundLight,
         borderRadius: theme.borderRadius.md,
         paddingHorizontal: theme.spacing.md,
         fontSize: 18,

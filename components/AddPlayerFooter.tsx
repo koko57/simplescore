@@ -6,7 +6,10 @@ type AddPlayerFooterProps = {
     disabled: boolean;
 };
 
-export const AddPlayerFooter = ({ handleStartGame, disabled }: AddPlayerFooterProps) => {
+export const AddPlayerFooter = ({
+    handleStartGame,
+    disabled,
+}: AddPlayerFooterProps) => {
     return (
         <View style={styles.footer}>
             <Pressable
