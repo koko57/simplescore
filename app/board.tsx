@@ -5,7 +5,6 @@ import {
     Pressable,
     StyleSheet,
     FlatList,
-    Modal,
     Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -13,13 +12,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGame } from '@/context/GameContext';
 import { Player } from '@/types';
+import { STORAGE_KEY } from '@/constants';
 import { theme } from '@/constants/theme';
+import { ACTION_TYPES } from '@/constants/actionTypes';
+import { ROUTES } from '@/constants/routes';
 import { AddPointsModal } from '@components/AddPointsModal';
 import { PlayerRow } from '@components/PlayerRow';
 import { EndGameFooter } from '@components/EndGameFooter';
 import { MenuModal } from '@components/MenuModal';
-
-const STORAGE_KEY = '@scoreboard_game';
 
 const BoardScreen = () => {
     const router = useRouter();
@@ -69,7 +69,7 @@ const BoardScreen = () => {
         }
 
         dispatch({
-            type: 'ADD_POINTS',
+            type: ACTION_TYPES.ADD_POINTS,
             payload: {
                 id: selectedPlayer.id,
                 points: subtract ? -points : points,
@@ -88,7 +88,7 @@ const BoardScreen = () => {
                     text: 'Reset',
                     style: 'destructive',
                     onPress: () => {
-                        dispatch({ type: 'RESET_ALL' });
+                        dispatch({ type: ACTION_TYPES.RESET_ALL });
                         setShowMenu(false);
                     },
                 },
@@ -111,8 +111,8 @@ const BoardScreen = () => {
                     text: 'Quit',
                     style: 'destructive',
                     onPress: () => {
-                        dispatch({ type: 'NEW_GAME' });
-                        router.replace('/');
+                        dispatch({ type: ACTION_TYPES.NEW_GAME });
+                        router.replace(ROUTES.HOME);
                     },
                 },
             ]
@@ -121,12 +121,12 @@ const BoardScreen = () => {
 
     const handleNewGameFromEnd = async (): Promise<void> => {
         await AsyncStorage.removeItem(STORAGE_KEY);
-        dispatch({ type: 'NEW_GAME' });
-        router.replace('/add-players');
+        dispatch({ type: ACTION_TYPES.NEW_GAME });
+        router.replace(ROUTES.ADD_PLAYERS);
     };
 
     const handlePlayAgain = (): void => {
-        dispatch({ type: 'RESET_ALL' });
+        dispatch({ type: ACTION_TYPES.RESET_ALL });
         setGameEnded(false);
     };
 
@@ -230,9 +230,9 @@ const styles = StyleSheet.create({
         color: theme.colors.text,
     },
     menuButton: {
-        width: 44,
-        height: 44,
-        borderRadius: 22,
+        width: 56,
+        height: 56,
+        borderRadius: theme.borderRadius.md,
         backgroundColor: theme.colors.background,
         justifyContent: 'center',
         alignItems: 'center',

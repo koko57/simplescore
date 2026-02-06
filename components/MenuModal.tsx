@@ -1,4 +1,4 @@
-import { Modal, Pressable, Text, StyleSheet } from 'react-native';
+import { Modal, Pressable, Text, View, StyleSheet } from 'react-native';
 import { theme } from '@/constants/theme';
 
 type MenuModalProps = {
@@ -26,7 +26,7 @@ export const MenuModal = ({
             onRequestClose={onClose}
         >
             <Pressable style={styles.modalOverlay} onPress={onClose}>
-                <Pressable style={styles.menuContent} onPress={() => {}}>
+                <View style={styles.menuContent}>
                     <Text style={styles.menuTitle}>Game Menu</Text>
 
                     <Pressable style={styles.menuItem} onPress={saveGame}>
@@ -55,7 +55,7 @@ export const MenuModal = ({
                     <Pressable style={styles.cancelItem} onPress={onClose}>
                         <Text style={styles.cancelText}>Cancel</Text>
                     </Pressable>
-                </Pressable>
+                </View>
             </Pressable>
         </Modal>
     );

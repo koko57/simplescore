@@ -13,6 +13,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useGame } from '@/context/GameContext';
 import { MAX_PLAYERS } from '@/constants/colors';
 import { theme } from '@/constants/theme';
+import { ACTION_TYPES } from '@/constants/actionTypes';
+import { ROUTES } from '@/constants/routes';
 import { Player } from '@/types';
 import { PlayerNameRow } from '@components/PlayerNameRow';
 import { AddPlayerInput } from '@components/AddPlayerInput';
@@ -26,6 +28,8 @@ const AddPlayersScreen = () => {
     const [editName, setEditName] = useState('');
     const inputRef = useRef<TextInput>(null);
 
+    const notEnoughPlayers = state.players.length < 2;
+
     const handleAddPlayer = (): void => {
         const trimmedName = playerName.trim();
         if (!trimmedName) return;
@@ -38,13 +42,13 @@ const AddPlayersScreen = () => {
             return;
         }
 
-        dispatch({ type: 'ADD_PLAYER', payload: { name: trimmedName } });
+        dispatch({ type: ACTION_TYPES.ADD_PLAYER, payload: { name: trimmedName } });
         setPlayerName('');
         inputRef.current?.focus();
     };
 
     const handleRemovePlayer = (id: string): void => {
-        dispatch({ type: 'REMOVE_PLAYER', payload: { id } });
+        dispatch({ type: ACTION_TYPES.REMOVE_PLAYER, payload: { id } });
     };
 
     const handleStartEdit = (player: Player): void => {
@@ -59,7 +63,7 @@ const AddPlayersScreen = () => {
         }
 
         dispatch({
-            type: 'EDIT_PLAYER',
+            type: ACTION_TYPES.EDIT_PLAYER,
             payload: { id: editingId, name: editName.trim() },
         });
         setEditingId(null);
@@ -68,7 +72,7 @@ const AddPlayersScreen = () => {
     };
 
     const handleStartGame = (): void => {
-        if (state.players.length < 2) {
+        if (notEnoughPlayers) {
             Alert.alert(
                 'Not Enough Players',
                 'Add at least 2 players to start',
@@ -76,7 +80,7 @@ const AddPlayersScreen = () => {
             return;
         }
 
-        router.replace('/board');
+        router.replace(ROUTES.BOARD);
     };
 
     const renderPlayer = ({ item }: { item: Player }) => {
@@ -96,7 +100,7 @@ const AddPlayersScreen = () => {
     };
 
     return (
-        <SafeAreaView style={styles.container} edges={['bottom']}>
+        <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
             <AddPlayerInput
                 inputRef={inputRef}
                 addPlayer={handleAddPlayer}
@@ -132,7 +136,7 @@ const AddPlayersScreen = () => {
 
             <AddPlayerFooter
                 handleStartGame={handleStartGame}
-                disabled={state.players.length < 2}
+                disabled={notEnoughPlayers}
             />
         </SafeAreaView>
     );

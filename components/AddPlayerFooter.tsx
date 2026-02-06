@@ -6,7 +6,10 @@ type AddPlayerFooterProps = {
     disabled: boolean;
 };
 
-export const AddPlayerFooter = ({ handleStartGame, disabled }: AddPlayerFooterProps) => {
+export const AddPlayerFooter = ({
+    handleStartGame,
+    disabled,
+}: AddPlayerFooterProps) => {
     return (
         <View style={styles.footer}>
             <Pressable
@@ -39,7 +42,7 @@ const styles = StyleSheet.create({
     startButton: {
         backgroundColor: theme.colors.successDark,
         paddingVertical: 18,
-        borderRadius: theme.borderRadius.lg,
+        borderRadius: theme.borderRadius.md,
         alignItems: 'center',
         ...theme.shadows.soft,
     },

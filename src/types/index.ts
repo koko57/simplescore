@@ -1,3 +1,5 @@
+import { ACTION_TYPES } from '@/constants/actionTypes';
+
 export type Player = {
     id: string;
     name: string;
@@ -11,10 +13,10 @@ export type GameState = {
 };
 
 export type GameAction =
-    | { type: 'ADD_PLAYER'; payload: { name: string } }
-    | { type: 'REMOVE_PLAYER'; payload: { id: string } }
-    | { type: 'EDIT_PLAYER'; payload: { id: string; name: string } }
-    | { type: 'ADD_POINTS'; payload: { id: string; points: number } }
-    | { type: 'RESET_ALL' }
-    | { type: 'NEW_GAME' }
-    | { type: 'LOAD_GAME'; payload: { players: Player[] } };
+    | { type: typeof ACTION_TYPES.ADD_PLAYER; payload: { name: string } }
+    | { type: typeof ACTION_TYPES.REMOVE_PLAYER; payload: { id: string } }
+    | { type: typeof ACTION_TYPES.EDIT_PLAYER; payload: { id: string; name: string } }
+    | { type: typeof ACTION_TYPES.ADD_POINTS; payload: { id: string; points: number } }
+    | { type: typeof ACTION_TYPES.RESET_ALL }
+    | { type: typeof ACTION_TYPES.NEW_GAME }
+    | { type: typeof ACTION_TYPES.LOAD_GAME; payload: { players: Player[] } };

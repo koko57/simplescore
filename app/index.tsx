@@ -6,8 +6,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGame } from '@/context/GameContext';
 import { Player } from '@/types';
 import { theme } from '@/constants/theme';
-
-const STORAGE_KEY = '@scoreboard_game';
+import { STORAGE_KEY } from '@/constants';
+import { ACTION_TYPES } from '@/constants/actionTypes';
+import { ROUTES } from '@/constants/routes';
 
 const HomeScreen = () => {
     const router = useRouter();
@@ -29,8 +30,8 @@ const HomeScreen = () => {
     );
 
     const handleNewGame = (): void => {
-        dispatch({ type: 'NEW_GAME' });
-        router.push('/add-players');
+        dispatch({ type: ACTION_TYPES.NEW_GAME });
+        router.push(ROUTES.ADD_PLAYERS);
     };
 
     const handleLoadGame = async (): Promise<void> => {
@@ -38,8 +39,8 @@ const HomeScreen = () => {
             const saved = await AsyncStorage.getItem(STORAGE_KEY);
             if (saved) {
                 const players: Player[] = JSON.parse(saved);
-                dispatch({ type: 'LOAD_GAME', payload: { players } });
-                router.push('/board');
+                dispatch({ type: ACTION_TYPES.LOAD_GAME, payload: { players } });
+                router.push(ROUTES.BOARD);
             }
         } catch {
             Alert.alert('Error', 'Failed to load saved game');
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
     button: {
         paddingVertical: 20,
         paddingHorizontal: theme.spacing.xl,
-        borderRadius: theme.borderRadius.lg,
+        borderRadius: theme.borderRadius.md,
         alignItems: 'center',
     },
     buttonPressed: {
