@@ -114,7 +114,7 @@ const AddPlayersScreen = () => {
                     <Ionicons
                         name="chevron-back"
                         size={24}
-                        color={theme.colors.text}
+                        color={theme.colors.primary}
                     />
                 </Pressable>
             </View>
