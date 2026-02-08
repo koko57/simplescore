@@ -2,6 +2,7 @@ import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 import { GameState, GameAction, Player } from '@/types';
 import { PLAYER_COLORS } from '@/constants/colors';
 import { ACTION_TYPES } from '@/constants/actionTypes';
+import { MAX_SCORE } from '@/constants';
 
 const initialState: GameState = {
     players: [],
@@ -56,7 +57,10 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
                     player.id === action.payload.id
                         ? {
                               ...player,
-                              score: player.score + action.payload.points,
+                              score: Math.min(
+                                  MAX_SCORE,
+                                  player.score + action.payload.points
+                              ),
                           }
                         : player
                 ),

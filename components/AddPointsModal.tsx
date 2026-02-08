@@ -8,6 +8,7 @@ import {
     View,
 } from 'react-native';
 import { theme } from '@/constants/theme';
+import { MAX_SCORE } from '@/constants';
 import { Player } from '@/types';
 
 type AddPointsModalProps = {
@@ -27,6 +28,8 @@ export const AddPointsModal = ({
         addPoints(value, subtract);
         setValue('');
     };
+
+    const isMax = selectedPlayer?.score === MAX_SCORE;
 
     return (
         <Modal
@@ -48,6 +51,7 @@ export const AddPointsModal = ({
                     </Text>
                     <Text style={styles.modalSubtitle}>
                         Current score: {selectedPlayer?.score}
+                        {isMax && ' (MAX)'}
                     </Text>
 
                     <TextInput
@@ -58,6 +62,7 @@ export const AddPointsModal = ({
                         value={value}
                         onChangeText={setValue}
                         autoFocus
+                        maxLength={3}
                     />
                     <View style={styles.modalButtons}>
                         <Pressable
@@ -74,11 +79,20 @@ export const AddPointsModal = ({
                             style={({ pressed }) => [
                                 styles.modalButton,
                                 styles.addPointsButton,
-                                pressed && styles.buttonPressed,
+                                pressed && !isMax && styles.buttonPressed,
+                                isMax && styles.buttonDisabled,
                             ]}
                             onPress={() => handleAddPoints(false)}
+                            disabled={isMax}
                         >
-                            <Text style={styles.addPointsText}>+</Text>
+                            <Text
+                                style={[
+                                    styles.addPointsText,
+                                    isMax && styles.textDisabled,
+                                ]}
+                            >
+                                +
+                            </Text>
                         </Pressable>
                     </View>
                 </View>
@@ -164,5 +178,11 @@ const styles = StyleSheet.create({
         color: theme.colors.textOnPrimary,
         fontSize: 17,
         fontWeight: '700',
+    },
+    buttonDisabled: {
+        opacity: 0.4,
+    },
+    textDisabled: {
+        opacity: 0.6,
     },
 });
