@@ -26,35 +26,42 @@ export const MenuModal = ({
             onRequestClose={onClose}
         >
             <Pressable style={styles.modalOverlay} onPress={onClose}>
-                <View style={styles.menuContent}>
-                    <Text style={styles.menuTitle}>Game Menu</Text>
+                <View style={styles.menuWrapper}>
+                    <View style={styles.menuContent}>
+                        <Text style={styles.menuTitle}>Game Menu</Text>
 
-                    <Pressable style={styles.menuItem} onPress={saveGame}>
-                        <Text style={styles.menuItemText}>Save Game</Text>
-                    </Pressable>
+                        <Pressable style={styles.menuItem} onPress={saveGame}>
+                            <Text style={styles.menuItemText}>Save Game</Text>
+                        </Pressable>
 
-                    <Pressable style={styles.menuItem} onPress={resetScores}>
-                        <Text style={styles.menuItemText}>
-                            Reset All Scores
-                        </Text>
-                    </Pressable>
+                        <Pressable
+                            style={styles.menuItem}
+                            onPress={resetScores}
+                        >
+                            <Text style={styles.menuItemText}>
+                                Reset All Scores
+                            </Text>
+                        </Pressable>
 
-                    <Pressable style={styles.menuItem} onPress={endGame}>
-                        <Text style={styles.menuItemText}>End Game</Text>
-                    </Pressable>
+                        <Pressable style={styles.menuItem} onPress={endGame}>
+                            <Text style={styles.menuItemText}>End Game</Text>
+                        </Pressable>
 
-                    <Pressable
-                        style={[styles.menuItem, styles.quitItem]}
-                        onPress={quitGame}
-                    >
-                        <Text style={[styles.menuItemText, styles.quitText]}>
-                            Quit Game
-                        </Text>
-                    </Pressable>
+                        <Pressable
+                            style={[styles.menuItem, styles.quitItem]}
+                            onPress={quitGame}
+                        >
+                            <Text
+                                style={[styles.menuItemText, styles.quitText]}
+                            >
+                                Quit Game
+                            </Text>
+                        </Pressable>
 
-                    <Pressable style={styles.cancelItem} onPress={onClose}>
-                        <Text style={styles.cancelText}>Cancel</Text>
-                    </Pressable>
+                        <Pressable style={styles.cancelItem} onPress={onClose}>
+                            <Text style={styles.cancelText}>Cancel</Text>
+                        </Pressable>
+                    </View>
                 </View>
             </Pressable>
         </Modal>
@@ -67,13 +74,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    menuContent: {
-        backgroundColor: theme.colors.backgroundLight,
+    menuWrapper: {
         borderRadius: theme.borderRadius.xl,
         width: '85%',
         maxWidth: 340,
-        overflow: 'hidden',
         ...theme.shadows.card,
+    },
+    menuContent: {
+        borderRadius: theme.borderRadius.xl,
+        backgroundColor: theme.colors.surface,
+        overflow: 'hidden',
     },
     menuTitle: {
         fontSize: 20,
