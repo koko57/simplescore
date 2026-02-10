@@ -9,6 +9,7 @@ import { theme } from '@/constants/theme';
 import { STORAGE_KEY } from '@/constants';
 import { ACTION_TYPES } from '@/constants/actionTypes';
 import { ROUTES } from '@/constants/routes';
+import { Image } from 'expo-image';
 
 const HomeScreen = () => {
     const router = useRouter();
@@ -59,7 +60,7 @@ const HomeScreen = () => {
                 <View style={styles.decorCircle3} />
 
                 <View style={styles.logoContainer}>
-                    <Text style={styles.logoText}>S</Text>
+                    <Image source={require('@assets/icon.png')} style={styles.logo}/>
                 </View>
                 <Text style={styles.title}>ScoreBoard</Text>
                 <Text style={styles.subtitle}>Let the games begin!</Text>
@@ -146,12 +147,18 @@ const styles = StyleSheet.create({
     logoContainer: {
         width: 100,
         height: 100,
-        borderRadius: theme.borderRadius.xl,
+        padding: 4,
+        borderRadius: theme.borderRadius.lg,
         backgroundColor: theme.colors.primary,
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: theme.spacing.lg,
+        overflow: 'hidden',
         ...theme.shadows.card,
+    },
+    logo: {
+      height: '100%',
+      width: '100%',
     },
     logoText: {
         fontSize: 52,
