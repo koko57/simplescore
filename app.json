@@ -9,24 +9,29 @@
         "scheme": "scoreboard",
         "newArchEnabled": true,
         "splash": {
-            "image": "./assets/splash-icon.png",
+            "image": "./assets/icon.png",
             "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
+            "backgroundColor": "#9575CD"
         },
         "ios": {
-            "supportsTablet": true
+            "supportsTablet": true,
+            "bundleIdentifier": "com.koko57.scoreboard"
         },
         "android": {
             "adaptiveIcon": {
                 "foregroundImage": "./assets/adaptive-icon.png",
-                "backgroundColor": "#ffffff"
+                "backgroundColor": "#9575CD"
             },
-            "edgeToEdgeEnabled": true,
-            "predictiveBackGestureEnabled": false
+            "package": "com.koko57.scoreboard",
+            "edgeToEdgeEnabled": true
         },
-        "web": {
-            "favicon": "./assets/favicon.png"
+        "plugins": ["expo-router"],
+        "extra": {
+            "router": {},
+            "eas": {
+                "projectId": "83ca0645-ef32-4b35-b36f-517991ba989a"
+            }
         },
-        "plugins": ["expo-router"]
+        "owner": "koko57"
     }
 }
