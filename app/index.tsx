@@ -163,11 +163,6 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
     },
-    logoText: {
-        fontSize: 52,
-        fontWeight: '800',
-        color: theme.colors.textOnPrimary,
-    },
     title: {
         fontSize: 44,
         fontWeight: '800',
