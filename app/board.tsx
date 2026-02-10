@@ -132,6 +132,10 @@ const BoardScreen = () => {
 
     const playerScores = state.players.map((player) => player.score);
 
+    const sortedPlayers = gameEnded
+        ? [...state.players].sort((a, b) => b.score - a.score)
+        : state.players;
+
     const renderPlayer = ({ item }: { item: Player }) => {
         const isWinner = gameEnded && item.score === Math.max(...playerScores);
 
@@ -174,7 +178,7 @@ const BoardScreen = () => {
                 }
             >
                 <FlatList
-                    data={state.players}
+                    data={sortedPlayers}
                     keyExtractor={(item) => item.id}
                     renderItem={renderPlayer}
                     contentContainerStyle={styles.listContent}
