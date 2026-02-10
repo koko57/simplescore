@@ -60,7 +60,10 @@ const HomeScreen = () => {
                 <View style={styles.decorCircle3} />
 
                 <View style={styles.logoContainer}>
-                    <Image source={require('@assets/icon.png')} style={styles.logo}/>
+                    <Image
+                        source={require('@assets/icon.png')}
+                        style={styles.logo}
+                    />
                 </View>
                 <Text style={styles.title}>ScoreBoard</Text>
                 <Text style={styles.subtitle}>Let the games begin!</Text>
@@ -157,8 +160,8 @@ const styles = StyleSheet.create({
         ...theme.shadows.card,
     },
     logo: {
-      height: '100%',
-      width: '100%',
+        height: '100%',
+        width: '100%',
     },
     logoText: {
         fontSize: 52,
