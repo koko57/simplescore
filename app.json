@@ -15,7 +15,10 @@
         },
         "ios": {
             "supportsTablet": true,
-            "bundleIdentifier": "com.koko57.scoreboard"
+            "bundleIdentifier": "com.koko57.scoreboard",
+            "infoPlist": {
+                "ITSAppUsesNonExemptEncryption": false
+            }
         },
         "android": {
             "adaptiveIcon": {
@@ -25,7 +28,7 @@
             "package": "com.koko57.scoreboard",
             "edgeToEdgeEnabled": true
         },
-        "plugins": ["expo-router"],
+        "plugins": ["expo-router", "expo-font"],
         "extra": {
             "router": {},
             "eas": {
